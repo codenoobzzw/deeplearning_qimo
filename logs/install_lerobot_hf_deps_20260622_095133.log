@@ -1,0 +1,236 @@
+# install_lerobot_hf_deps
+start: 2026-06-22T09:51:33+00:00
+project_root: /home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project
+git_commit: no-git
+expected_output: local_pkgs/lerobot
+command: bash -lc PIP_CACHE_DIR=/tmp/hw3_pip_cache\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ -m\ pip\ install\ --upgrade\ --target\ local_pkgs/lerobot\ huggingface-hub\ datasets 
+
+## nvidia-smi before
+Mon Jun 22 09:51:33 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 36%   67C    P2            138W /  300W |    4908MiB /  49140MiB |     40%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   33C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+## command output
+Collecting huggingface-hub
+  Downloading huggingface_hub-1.20.1-py3-none-any.whl.metadata (14 kB)
+Collecting datasets
+  Downloading datasets-5.0.0-py3-none-any.whl.metadata (23 kB)
+Collecting click>=8.4.0 (from huggingface-hub)
+  Downloading click-8.4.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting filelock>=3.10.0 (from huggingface-hub)
+  Downloading filelock-3.29.4-py3-none-any.whl.metadata (2.0 kB)
+Collecting fsspec>=2023.5.0 (from huggingface-hub)
+  Downloading fsspec-2026.6.0-py3-none-any.whl.metadata (10 kB)
+Collecting hf-xet<2.0.0,>=1.5.1 (from huggingface-hub)
+  Downloading hf_xet-1.5.1-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+Collecting httpx<1,>=0.23.0 (from huggingface-hub)
+  Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting packaging>=20.9 (from huggingface-hub)
+  Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting pyyaml>=5.1 (from huggingface-hub)
+  Using cached pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Collecting tqdm>=4.42.1 (from huggingface-hub)
+  Using cached tqdm-4.68.3-py3-none-any.whl.metadata (57 kB)
+Collecting typer<0.26.0,>=0.20.0 (from huggingface-hub)
+  Downloading typer-0.25.1-py3-none-any.whl.metadata (15 kB)
+Collecting typing-extensions>=4.1.0 (from huggingface-hub)
+  Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting numpy>=1.17 (from datasets)
+  Using cached numpy-2.5.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Collecting pyarrow>=21.0.0 (from datasets)
+  Using cached pyarrow-24.0.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (3.0 kB)
+Collecting dill<0.4.2,>=0.3.0 (from datasets)
+  Downloading dill-0.4.1-py3-none-any.whl.metadata (10 kB)
+Collecting pandas (from datasets)
+  Using cached pandas-3.0.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (79 kB)
+Collecting requests>=2.32.2 (from datasets)
+  Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting xxhash (from datasets)
+  Downloading xxhash-3.7.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (13 kB)
+Collecting multiprocess<0.70.20 (from datasets)
+  Downloading multiprocess-0.70.19-py312-none-any.whl.metadata (7.5 kB)
+Collecting fsspec>=2023.5.0 (from huggingface-hub)
+  Downloading fsspec-2026.4.0-py3-none-any.whl.metadata (10 kB)
+Collecting aiohttp!=4.0.0a0,!=4.0.0a1 (from fsspec[http]<=2026.4.0,>=2023.1.0->datasets)
+  Downloading aiohttp-3.14.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.3 kB)
+Collecting anyio (from httpx<1,>=0.23.0->huggingface-hub)
+  Downloading anyio-4.14.0-py3-none-any.whl.metadata (4.6 kB)
+Collecting certifi (from httpx<1,>=0.23.0->huggingface-hub)
+  Using cached certifi-2026.6.17-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx<1,>=0.23.0->huggingface-hub)
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting idna (from httpx<1,>=0.23.0->huggingface-hub)
+  Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx<1,>=0.23.0->huggingface-hub)
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting charset_normalizer<4,>=2 (from requests>=2.32.2->datasets)
+  Using cached charset_normalizer-3.4.7-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Collecting urllib3<3,>=1.26 (from requests>=2.32.2->datasets)
+  Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting shellingham>=1.3.0 (from typer<0.26.0,>=0.20.0->huggingface-hub)
+  Downloading shellingham-1.5.4-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting rich>=13.8.0 (from typer<0.26.0,>=0.20.0->huggingface-hub)
+  Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting annotated-doc>=0.0.2 (from typer<0.26.0,>=0.20.0->huggingface-hub)
+  Downloading annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+Collecting python-dateutil>=2.8.2 (from pandas->datasets)
+  Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting aiohappyeyeballs>=2.5.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.4.0,>=2023.1.0->datasets)
+  Downloading aiohappyeyeballs-2.6.2-py3-none-any.whl.metadata (5.9 kB)
+Collecting aiosignal>=1.4.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.4.0,>=2023.1.0->datasets)
+  Downloading aiosignal-1.4.0-py3-none-any.whl.metadata (3.7 kB)
+Collecting attrs>=17.3.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.4.0,>=2023.1.0->datasets)
+  Using cached attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting frozenlist>=1.1.1 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.4.0,>=2023.1.0->datasets)
+  Downloading frozenlist-1.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (20 kB)
+Collecting multidict<7.0,>=4.5 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.4.0,>=2023.1.0->datasets)
+  Downloading multidict-6.7.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+Collecting propcache>=0.2.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.4.0,>=2023.1.0->datasets)
+  Downloading propcache-0.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (16 kB)
+Collecting yarl<2.0,>=1.17.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.4.0,>=2023.1.0->datasets)
+  Downloading yarl-1.24.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (94 kB)
+Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas->datasets)
+  Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=13.8.0->typer<0.26.0,>=0.20.0->huggingface-hub)
+  Downloading markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=13.8.0->typer<0.26.0,>=0.20.0->huggingface-hub)
+  Downloading pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=13.8.0->typer<0.26.0,>=0.20.0->huggingface-hub)
+  Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Downloading huggingface_hub-1.20.1-py3-none-any.whl (719 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 719.8/719.8 kB 1.5 MB/s eta 0:00:00
+Downloading datasets-5.0.0-py3-none-any.whl (555 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 555.1/555.1 kB 1.8 MB/s eta 0:00:00
+Downloading click-8.4.1-py3-none-any.whl (116 kB)
+Downloading dill-0.4.1-py3-none-any.whl (120 kB)
+Downloading filelock-3.29.4-py3-none-any.whl (42 kB)
+Downloading fsspec-2026.4.0-py3-none-any.whl (203 kB)
+Downloading hf_xet-1.5.1-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.5/4.5 MB 5.0 MB/s eta 0:00:00
+Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+Downloading multiprocess-0.70.19-py312-none-any.whl (150 kB)
+Using cached numpy-2.5.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.7 MB)
+Using cached packaging-26.2-py3-none-any.whl (100 kB)
+Using cached pyarrow-24.0.0-cp312-cp312-manylinux_2_28_x86_64.whl (48.9 MB)
+Using cached pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+Using cached requests-2.34.2-py3-none-any.whl (73 kB)
+Using cached tqdm-4.68.3-py3-none-any.whl (78 kB)
+Downloading typer-0.25.1-py3-none-any.whl (58 kB)
+Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Using cached pandas-3.0.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (10.9 MB)
+Downloading xxhash-3.7.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (193 kB)
+Downloading aiohttp-3.14.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 21.5 MB/s eta 0:00:00
+Downloading annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+Using cached certifi-2026.6.17-py3-none-any.whl (133 kB)
+Using cached charset_normalizer-3.4.7-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (216 kB)
+Using cached idna-3.18-py3-none-any.whl (65 kB)
+Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Using cached urllib3-2.7.0-py3-none-any.whl (131 kB)
+Downloading anyio-4.14.0-py3-none-any.whl (123 kB)
+Downloading aiohappyeyeballs-2.6.2-py3-none-any.whl (15 kB)
+Downloading aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+Using cached attrs-26.1.0-py3-none-any.whl (67 kB)
+Downloading frozenlist-1.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (242 kB)
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+Downloading multidict-6.7.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (256 kB)
+Downloading propcache-0.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (61 kB)
+Downloading pygments-2.20.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 11.4 MB/s eta 0:00:00
+Using cached six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading yarl-1.24.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (105 kB)
+Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Installing collected packages: xxhash, urllib3, typing-extensions, tqdm, six, shellingham, pyyaml, pygments, pyarrow, propcache, packaging, numpy, multidict, mdurl, idna, hf-xet, h11, fsspec, frozenlist, filelock, dill, click, charset_normalizer, certifi, attrs, annotated-doc, aiohappyeyeballs, yarl, requests, python-dateutil, multiprocess, markdown-it-py, httpcore, anyio, aiosignal, rich, pandas, httpx, aiohttp, typer, huggingface-hub, datasets
+Successfully installed aiohappyeyeballs-2.6.2 aiohttp-3.14.1 aiosignal-1.4.0 annotated-doc-0.0.4 anyio-4.14.0 attrs-26.1.0 certifi-2026.6.17 charset_normalizer-3.4.7 click-8.4.1 datasets-5.0.0 dill-0.4.1 filelock-3.29.4 frozenlist-1.8.0 fsspec-2026.4.0 h11-0.16.0 hf-xet-1.5.1 httpcore-1.0.9 httpx-0.28.1 huggingface-hub-1.20.1 idna-3.18 markdown-it-py-4.2.0 mdurl-0.1.2 multidict-6.7.1 multiprocess-0.70.19 numpy-2.5.0 packaging-26.2 pandas-3.0.3 propcache-0.5.2 pyarrow-24.0.0 pygments-2.20.0 python-dateutil-2.9.0.post0 pyyaml-6.0.3 requests-2.34.2 rich-15.0.0 shellingham-1.5.4 six-1.17.0 tqdm-4.68.3 typer-0.25.1 typing-extensions-4.15.0 urllib3-2.7.0 xxhash-3.7.0 yarl-1.24.2
+DEPRECATION: Loading egg at /home/zhangzhiwei/miniconda3/lib/python3.12/site-packages/faiss-1.12.0-py3.12.egg is deprecated. pip 25.1 will enforce this behaviour change. A possible replacement is to use pip for package installation. Discussion can be found at https://github.com/pypa/pip/issues/12330
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+streamlit 1.52.2 requires pandas<3,>=1.4.0, but you have pandas 3.0.3 which is incompatible.
+swanlab 0.7.18 requires rich<14.0.0,>=13.6.0, but you have rich 15.0.0 which is incompatible.
+
+
+	Command being timed: "bash -lc PIP_CACHE_DIR=/tmp/hw3_pip_cache /home/zhangzhiwei/miniconda3/bin/conda run -n base python -m pip install --upgrade --target local_pkgs/lerobot huggingface-hub datasets"
+	User time (seconds): 14.48
+	System time (seconds): 2.15
+	Percent of CPU this job got: 36%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:45.15
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 127560
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 278693
+	Voluntary context switches: 3855
+	Involuntary context switches: 1754
+	Swaps: 0
+	File system inputs: 24
+	File system outputs: 1705016
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+## nvidia-smi after
+Mon Jun 22 09:52:18 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 37%   65C    P2            161W /  300W |    4908MiB /  49140MiB |     13%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   33C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+status: 0
+end: 2026-06-22T09:52:18+00:00
+duration_sec: 45

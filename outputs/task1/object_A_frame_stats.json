@@ -1,0 +1,90 @@
+{
+  "candidate_count": 6,
+  "selected_count": 5,
+  "blur_quantile": 0.05,
+  "similarity_threshold": 0.995,
+  "records": [
+    {
+      "input": "inputs/object_A/物体A.jpg",
+      "index": 0,
+      "selected": true,
+      "reason": "selected",
+      "laplacian_variance": 714.753173828125,
+      "output": "data/object_A/input/0001.jpg",
+      "original_size": [
+        1280,
+        1707
+      ]
+    },
+    {
+      "input": "inputs/object_A/物体A2.jpg",
+      "index": 1,
+      "selected": true,
+      "reason": "selected",
+      "laplacian_variance": 1190.866943359375,
+      "output": "data/object_A/input/0002.jpg",
+      "original_size": [
+        1280,
+        1707
+      ]
+    },
+    {
+      "input": "inputs/object_A/物体A3.jpg",
+      "index": 2,
+      "selected": true,
+      "reason": "selected",
+      "laplacian_variance": 533.2560424804688,
+      "output": "data/object_A/input/0003.jpg",
+      "original_size": [
+        1280,
+        1707
+      ]
+    },
+    {
+      "input": "inputs/object_A/物体A4.jpg",
+      "index": 3,
+      "selected": true,
+      "reason": "selected",
+      "laplacian_variance": 678.9879760742188,
+      "output": "data/object_A/input/0004.jpg",
+      "original_size": [
+        1280,
+        1707
+      ]
+    },
+    {
+      "input": "inputs/object_A/物体A5.jpg",
+      "index": 4,
+      "selected": true,
+      "reason": "selected",
+      "laplacian_variance": 685.0650024414062,
+      "output": "data/object_A/input/0005.jpg",
+      "original_size": [
+        1280,
+        1707
+      ]
+    },
+    {
+      "input": "inputs/object_A/物体A6.jpg",
+      "index": 5,
+      "selected": false,
+      "reason": "blur_score_below_quantile_0.05",
+      "laplacian_variance": 389.4216003417969,
+      "output": null,
+      "original_size": [
+        1280,
+        1707
+      ]
+    }
+  ],
+  "status": "ok",
+  "mode": "images",
+  "source": [
+    "inputs/object_A/物体A.jpg",
+    "inputs/object_A/物体A2.jpg",
+    "inputs/object_A/物体A3.jpg",
+    "inputs/object_A/物体A4.jpg",
+    "inputs/object_A/物体A5.jpg",
+    "inputs/object_A/物体A6.jpg"
+  ]
+}

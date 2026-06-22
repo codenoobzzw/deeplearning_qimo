@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllllllllll}
+\hline
+Asset & Input source & Method & Output representation & Training steps or iterations & Number of input images & Number of Gaussians or mesh vertices/faces & Training time & Peak GPU memory & Main quality observations & Metrics \\
+\hline
+A & multi-view photos uploaded by student & COLMAP + 3DGS & No Gaussian PLY; COLMAP sparse model missing & COLMAP feature/match/mapper attempted; 3DGS training not started & 6 & NA & COLMAP mapper 72s; relaxed retry 142s; official convert patched retry 94s & 3DGS training not started & COLMAP repeatedly reported no good initial image pair; likely too few or insuffi & NA \\
+B & text prompt & DreamFusion SDS via threestudio & Mesh, then Gaussian-converted mesh & not\_run & 0 & NA & NA & NA & No generated mesh found in outputs. & NA \\
+C & single cup image uploaded by student & background removal + Stable Zero123/Magic123 via threestudio & RGBA prepared; mesh if training succeeds & preprocess\_only & 1 & NA & NA & NA & Heuristic RGBA exists; inspect handle and cup lid before Zero123 training. & NA \\
+Background & Mip-NeRF 360 counter preferred & 3DGS & Gaussian PLY if training succeeds & not\_run & 0 & NA & NA & NA & No Mip-NeRF 360 scene found locally yet. & NA \\
+\hline
+\end{tabular}}
+\caption{题目一资产生成结果汇总。}
+\end{table*}

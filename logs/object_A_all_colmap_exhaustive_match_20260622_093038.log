@@ -1,0 +1,50 @@
+# object_A_all_colmap_exhaustive_match
+start: 2026-06-22T09:30:38+00:00
+project_root: /home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project
+git_commit: no-git
+expected_output: data/object_A_all/database.db
+command: colmap exhaustive_matcher --database_path data/object_A_all/database.db --SiftMatching.use_gpu 0 
+
+## nvidia-smi before
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
+
+
+## command output
+
+==============================================================================
+Exhaustive feature matching
+==============================================================================
+
+Matching block [1/1, 1/1] in 1.921s
+Elapsed time: 0.032 [minutes]
+	Command being timed: "colmap exhaustive_matcher --database_path data/object_A_all/database.db --SiftMatching.use_gpu 0"
+	User time (seconds): 11.10
+	System time (seconds): 0.84
+	Percent of CPU this job got: 604%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.97
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 476368
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 357781
+	Voluntary context switches: 1468
+	Involuntary context switches: 1255
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 152
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+## nvidia-smi after
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
+
+
+status: 0
+end: 2026-06-22T09:30:40+00:00
+duration_sec: 2

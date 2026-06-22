@@ -1,0 +1,30 @@
+{
+  "background": {
+    "ply": "outputs/task1/background_3dgs/counter/point_cloud/iteration_30000/point_cloud.ply"
+  },
+  "objects": {
+    "object_A": {
+      "type": "gaussian",
+      "ply": "outputs/task1/object_A_3dgs/point_cloud/iteration_30000/point_cloud.ply",
+      "scale": 0.20,
+      "rotation_deg_xyz": [0, 0, 0],
+      "translation": [0.2, -0.4, 0.05]
+    },
+    "object_B": {
+      "type": "mesh",
+      "mesh": "outputs/task1/object_B_text3d/export/mesh.obj",
+      "sample_points": 80000,
+      "scale": 0.15,
+      "rotation_deg_xyz": [0, 0, 0],
+      "translation": [-0.3, -0.4, 0.05]
+    },
+    "object_C": {
+      "type": "mesh",
+      "mesh": "outputs/task1/object_C_image3d/export/mesh.obj",
+      "sample_points": 120000,
+      "scale": 0.25,
+      "rotation_deg_xyz": [0, 0, 0],
+      "translation": [0.0, -0.45, 0.05]
+    }
+  }
+}

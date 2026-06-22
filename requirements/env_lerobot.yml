@@ -1,0 +1,19 @@
+name: hw3_lerobot
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pytorch
+  - torchvision
+  - pytorch-cuda=12.4
+  - ffmpeg
+  - pip:
+      - lerobot
+      - huggingface_hub
+      - datasets
+      - wandb
+      - matplotlib

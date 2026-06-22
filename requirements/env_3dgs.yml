@@ -1,0 +1,19 @@
+name: hw3_3dgs
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.4
+  - cudatoolkit-dev
+  - colmap
+  - imagemagick
+  - pip:
+      - plyfile
+      - tqdm

@@ -1,0 +1,16 @@
+{
+  "method": "heuristic_dark_component_with_soft_prior",
+  "cv2_available": false,
+  "bbox": [
+    281,
+    45,
+    985,
+    1486
+  ],
+  "used_shape_prior_fallback": true,
+  "note": "rembg/SAM/cv2 were not required for this fallback path; inspect before_after before using for Zero123.",
+  "input": "inputs/object_C/cup.jpg",
+  "rgba_output": "third_party/threestudio/load/images/cup_rgba.png",
+  "size": 1024,
+  "padding": 24
+}

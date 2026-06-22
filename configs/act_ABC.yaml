@@ -1,0 +1,16 @@
+seed: 42
+policy: act
+dataset: data/calvin/lerobot_env_ABC
+output_dir: outputs/task2/act_ABC
+batch_size: 16
+learning_rate: 0.0001
+optimizer: AdamW
+weight_decay: 0.0001
+num_train_steps: 10000
+eval_freq: 1000
+save_freq: 5000
+chunk_size: 100
+image_size: [224, 224]
+cameras: ["observation.images.top", "observation.images.wrist"]
+loss: Action L1 Loss plus ACT KL term if enabled by the installed LeRobot version
+note: "Same architecture and hyperparameters as act_A.yaml; only the dataset path differs."

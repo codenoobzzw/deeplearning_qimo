@@ -1,0 +1,105 @@
+# calvin_hf_metadata_probe
+start: 2026-06-22T09:40:27+00:00
+project_root: /home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project
+git_commit: no-git
+expected_output: outputs/task2/calvin_split_summary.json
+command: /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/prepare_calvin_splits.py 
+
+## nvidia-smi before
+Mon Jun 22 09:40:27 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 37%   67C    P2            122W /  300W |    4908MiB /  49140MiB |     19%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   33C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+## command output
+ERROR conda.cli.main_run:execute(125): `conda run python scripts/prepare_calvin_splits.py` failed. (See above for error)
+{
+  "repo_id": "xiaoma26/calvin-lerobot",
+  "status": "blocked_hf_probe_failed",
+  "splits": [],
+  "notes": [],
+  "blocker": "(MaxRetryError(\"SOCKSHTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/datasets/xiaoma26/calvin-lerobot (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))\"), '(Request ID: fd522f97-a861-43df-9d81-ccfd266de131)')"
+}
+
+Command exited with non-zero status 1
+	Command being timed: "/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/prepare_calvin_splits.py"
+	User time (seconds): 2.56
+	System time (seconds): 0.51
+	Percent of CPU this job got: 28%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:10.90
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 69500
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 37
+	Minor (reclaiming a frame) page faults: 159192
+	Voluntary context switches: 1716
+	Involuntary context switches: 318
+	Swaps: 0
+	File system inputs: 18144
+	File system outputs: 32
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+
+## nvidia-smi after
+Mon Jun 22 09:40:38 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 37%   64C    P2            120W /  300W |    4908MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   33C    P8              9W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+status: 1
+end: 2026-06-22T09:40:38+00:00
+duration_sec: 11

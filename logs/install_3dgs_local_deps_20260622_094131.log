@@ -1,0 +1,132 @@
+# install_3dgs_local_deps
+start: 2026-06-22T09:41:31+00:00
+project_root: /home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project
+git_commit: no-git
+expected_output: local_pkgs/3dgs
+command: bash -lc mkdir\ -p\ local_pkgs/3dgs\ \&\&\ PIP_CACHE_DIR=/tmp/hw3_pip_cache\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ -m\ pip\ install\ --upgrade\ --target\ local_pkgs/3dgs\ plyfile\ ./third_party/gaussian-splatting/submodules/diff-gaussian-rasterization\ ./third_party/gaussian-splatting/submodules/simple-knn\ ./third_party/gaussian-splatting/submodules/fused-ssim 
+
+## nvidia-smi before
+Mon Jun 22 09:41:31 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 37%   64C    P2            117W /  300W |    4908MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   33C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+## command output
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)'))': /simple/plyfile/
+DEPRECATION: Loading egg at /home/zhangzhiwei/miniconda3/lib/python3.12/site-packages/faiss-1.12.0-py3.12.egg is deprecated. pip 25.1 will enforce this behaviour change. A possible replacement is to use pip for package installation. Discussion can be found at https://github.com/pypa/pip/issues/12330
+
+Processing ./third_party/gaussian-splatting/submodules/diff-gaussian-rasterization
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Processing ./third_party/gaussian-splatting/submodules/simple-knn
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Processing ./third_party/gaussian-splatting/submodules/fused-ssim
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting plyfile
+  Downloading plyfile-1.1.4-py3-none-any.whl.metadata (43 kB)
+Collecting numpy>=2.0 (from plyfile)
+  Downloading numpy-2.5.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Downloading plyfile-1.1.4-py3-none-any.whl (36 kB)
+Downloading numpy-2.5.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.7/16.7 MB 4.4 MB/s eta 0:00:00
+Building wheels for collected packages: diff_gaussian_rasterization, simple_knn, fused_ssim
+  Building wheel for diff_gaussian_rasterization (setup.py): started
+  Building wheel for diff_gaussian_rasterization (setup.py): still running...
+  Building wheel for diff_gaussian_rasterization (setup.py): finished with status 'done'
+  Created wheel for diff_gaussian_rasterization: filename=diff_gaussian_rasterization-0.0.0-cp312-cp312-linux_x86_64.whl size=676492 sha256=3930eb0f45932786561936f38a8c1bcd686d92baf7ac9b0f549e6d8f8c145740
+  Stored in directory: /tmp/hw3_pip_cache/wheels/f7/cd/93/3d72d516495f073549565da9e597b9b90704a5f7d96a4aeb7b
+  Building wheel for simple_knn (setup.py): started
+  Building wheel for simple_knn (setup.py): finished with status 'done'
+  Created wheel for simple_knn: filename=simple_knn-0.0.0-cp312-cp312-linux_x86_64.whl size=565119 sha256=b7ff3a28913ad717ea5304a409d048377010b7b363a7a49fe4d7ac4344f0aeb3
+  Stored in directory: /tmp/hw3_pip_cache/wheels/c7/f7/bd/0c72354c9f183a850251bd71302b5fba1592c81d3e992c8c45
+  Building wheel for fused_ssim (setup.py): started
+  Building wheel for fused_ssim (setup.py): finished with status 'done'
+  Created wheel for fused_ssim: filename=fused_ssim-0.0.0-cp312-cp312-linux_x86_64.whl size=241538 sha256=89c88bb94972d1e26d67c92159822253bbb2af542efa8d5b4607e95afd54ae7d
+  Stored in directory: /tmp/hw3_pip_cache/wheels/b1/65/dd/102e6481bd92fb35856ac8f4db7eb652e940221a936f4cb29c
+Successfully built diff_gaussian_rasterization simple_knn fused_ssim
+Installing collected packages: simple_knn, fused_ssim, diff_gaussian_rasterization, numpy, plyfile
+Successfully installed diff_gaussian_rasterization-0.0.0 fused_ssim-0.0.0 numpy-2.5.0 plyfile-1.1.4 simple_knn-0.0.0
+
+	Command being timed: "bash -lc mkdir -p local_pkgs/3dgs && PIP_CACHE_DIR=/tmp/hw3_pip_cache /home/zhangzhiwei/miniconda3/bin/conda run -n base python -m pip install --upgrade --target local_pkgs/3dgs plyfile ./third_party/gaussian-splatting/submodules/diff-gaussian-rasterization ./third_party/gaussian-splatting/submodules/simple-knn ./third_party/gaussian-splatting/submodules/fused-ssim"
+	User time (seconds): 253.66
+	System time (seconds): 18.40
+	Percent of CPU this job got: 135%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:21.09
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2947404
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1559
+	Minor (reclaiming a frame) page faults: 10859961
+	Voluntary context switches: 18106
+	Involuntary context switches: 28055
+	Swaps: 0
+	File system inputs: 291664
+	File system outputs: 989888
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+## nvidia-smi after
+Mon Jun 22 09:44:52 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 37%   64C    P2            171W /  300W |    4908MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   33C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+status: 0
+end: 2026-06-22T09:44:52+00:00
+duration_sec: 201

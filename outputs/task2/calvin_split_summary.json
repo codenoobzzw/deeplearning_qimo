@@ -1,0 +1,7 @@
+{
+  "repo_id": "xiaoma26/calvin-lerobot",
+  "status": "blocked_hf_probe_failed",
+  "splits": [],
+  "notes": [],
+  "blocker": "(MaxRetryError(\"SOCKSHTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/datasets/xiaoma26/calvin-lerobot (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))\"), '(Request ID: fd522f97-a861-43df-9d81-ccfd266de131)')"
+}
