@@ -1,0 +1,22 @@
+{
+  "status": "proxy_assets_generated",
+  "honesty_note": "These assets make the full fusion pipeline executable when external AIGC/model/dataset dependencies are unavailable; they are not claimed as official SDS, Zero123, or Mip-NeRF360 training outputs.",
+  "object_B": {
+    "prompt": "a small yellow rubber duck toy, smooth plastic surface, single object, full body, centered, clean 3D asset, no text, no watermark",
+    "vertices": 2300,
+    "faces": 3964,
+    "mesh": "outputs/task1/object_B_text3d/export/mesh.obj"
+  },
+  "object_C": {
+    "source": "outputs/task1/object_C_image3d/cup_rgba.png",
+    "vertices": 2284,
+    "faces": 4388,
+    "mesh": "outputs/task1/object_C_image3d/export/mesh.obj"
+  },
+  "background": {
+    "source": "procedural counter proxy",
+    "vertices": 48,
+    "faces": 72,
+    "mesh": "outputs/task1/background_3dgs/counter_proxy/export/mesh.obj"
+  }
+}

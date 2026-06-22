@@ -1,0 +1,44 @@
+{
+  "status": "proxy_act_training_complete",
+  "device": "cuda",
+  "honesty_note": "This is a local proxy experiment because real CALVIN split metadata/data could not be downloaded in the current network environment.",
+  "hyperparameters": {
+    "steps": 800,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "hidden_dim": 128,
+    "dropout": 0.05,
+    "chunk_size": 8,
+    "action_dim": 4,
+    "n_train_per_env": 768,
+    "n_val_per_env": 256,
+    "success_threshold": 0.22,
+    "log_every": 20,
+    "seed": 42
+  },
+  "final_D": [
+    {
+      "model": "ACT-A",
+      "metric_type": "proxy_zero_shot_D",
+      "mean_action_l1": "0.303447",
+      "median_action_l1": "0.306112",
+      "success_rate": "0.238281",
+      "status": "proxy_run",
+      "note": "Synthetic CALVIN-style visual distribution shift proxy; not a real CALVIN success rate."
+    },
+    {
+      "model": "ACT-ABC",
+      "metric_type": "proxy_zero_shot_D",
+      "mean_action_l1": "0.040896",
+      "median_action_l1": "0.038146",
+      "success_rate": "1.000000",
+      "status": "proxy_run",
+      "note": "Synthetic CALVIN-style visual distribution shift proxy; not a real CALVIN success rate."
+    }
+  ],
+  "weights": [
+    "outputs/weights/act_A_proxy.pt",
+    "outputs/weights/act_ABC_proxy.pt"
+  ]
+}

@@ -63,19 +63,22 @@ def status_figure(output: Path) -> None:
         ("3DGS deps", "ready"),
         ("Object A video SfM", "success: 63/90 registered"),
         ("Object A 3DGS", "success: 1000 iter"),
-        ("Object C RGBA", "heuristic done"),
+        ("Object B asset", "proxy mesh+Gaussian done"),
+        ("Object C asset", "RGBA+proxy mesh done"),
+        ("Background", "proxy Gaussian done"),
+        ("Scene fusion", "merged PLY+video done"),
         ("threestudio", "repo/config ready"),
         ("CALVIN HF", "splitA-D known; counts NA"),
-        ("LeRobot CLI", "help ready"),
+        ("ACT proxy", "loss curves+weights done"),
     ]
-    w, h = 1000, 410
+    w, h = 1000, 560
     canvas = Image.new("RGB", (w, h), "white")
     draw = ImageDraw.Draw(canvas)
     font = load_font(22)
     small = load_font(16)
     draw.text((24, 18), "实验状态摘要（来自真实运行日志）", fill=(20, 20, 20), font=font)
     y = 70
-    colors = {"ready": (44, 132, 84), "success": (44, 132, 84), "heuristic": (166, 112, 28), "repo": (44, 92, 160), "failed": (180, 60, 50), "blocked": (180, 60, 50), "splitA-D": (44, 92, 160), "help": (44, 132, 84)}
+    colors = {"ready": (44, 132, 84), "success": (44, 132, 84), "proxy": (166, 112, 28), "RGBA+proxy": (166, 112, 28), "merged": (44, 132, 84), "loss": (44, 132, 84), "repo": (44, 92, 160), "failed": (180, 60, 50), "blocked": (180, 60, 50), "splitA-D": (44, 92, 160), "help": (44, 132, 84)}
     for name, status in items:
         key = status.split(":")[0].split()[0]
         color = colors.get(key, (80, 80, 80))

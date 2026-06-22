@@ -339,3 +339,80 @@ completed. Results in the report must be traceable to logs or generated files.
 - success: yes
 - duration_sec: 10
 - gpu note: see nvidia-smi snapshots in the log
+
+## proxy_assets_generate
+- start: 2026-06-22T11:08:12+00:00
+- end: 2026-06-22T11:08:15+00:00
+- git commit: f813b12
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/generate_proxy_assets.py `
+- output path: `outputs/task1/proxy_assets_meta.json`
+- log: `logs/proxy_assets_generate_20260622_110812.log`
+- success: yes
+- duration_sec: 3
+- gpu note: see nvidia-smi snapshots in the log
+
+## background_counter_proxy_mesh_to_gaussian
+- start: 2026-06-22T11:08:23+00:00
+- end: 2026-06-22T11:08:26+00:00
+- git commit: f813b12
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/mesh_to_gaussians.py --mesh outputs/task1/background_3dgs/counter_proxy/export/mesh.obj --output outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply --sample-points 32000 --opacity 0.65 --seed 11 `
+- output path: `outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply`
+- log: `logs/background_counter_proxy_mesh_to_gaussian_20260622_110823.log`
+- success: yes
+- duration_sec: 3
+- gpu note: see nvidia-smi snapshots in the log
+
+## merge_proxy_scene
+- start: 2026-06-22T11:08:32+00:00
+- end: 2026-06-22T11:08:45+00:00
+- git commit: f813b12
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/merge_gaussians.py --config configs/placements.yaml --output outputs/task1/merged_scene/point_cloud.ply --workdir outputs/task1/merged_scene/intermediate `
+- output path: `outputs/task1/merged_scene/point_cloud.ply`
+- log: `logs/merge_proxy_scene_20260622_110832.log`
+- success: yes
+- duration_sec: 13
+- gpu note: see nvidia-smi snapshots in the log
+
+## merged_proxy_scene_render
+- start: 2026-06-22T11:08:57+00:00
+- end: 2026-06-22T11:09:13+00:00
+- git commit: f813b12
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/render_merged_path.py --input outputs/task1/merged_scene/point_cloud.ply --video-output outputs/task1/videos/merged_scene_walkthrough.mp4 --frames-dir outputs/task1/merged_scene/preview_frames --num-frames 72 --width 960 --height 540 `
+- output path: `outputs/task1/videos/merged_scene_walkthrough.mp4`
+- log: `logs/merged_proxy_scene_render_20260622_110857.log`
+- success: yes
+- duration_sec: 16
+- gpu note: see nvidia-smi snapshots in the log
+
+## merged_proxy_scene_render_robust
+- start: 2026-06-22T11:09:55+00:00
+- end: 2026-06-22T11:10:12+00:00
+- git commit: f813b12
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/render_merged_path.py --input outputs/task1/merged_scene/point_cloud.ply --video-output outputs/task1/videos/merged_scene_walkthrough.mp4 --frames-dir outputs/task1/merged_scene/preview_frames --num-frames 72 --width 960 --height 540 --point-radius 2 `
+- output path: `outputs/task1/videos/merged_scene_walkthrough.mp4`
+- log: `logs/merged_proxy_scene_render_robust_20260622_110955.log`
+- success: yes
+- duration_sec: 17
+- gpu note: see nvidia-smi snapshots in the log
+
+## act_proxy_train
+- start: 2026-06-22T11:12:16+00:00
+- end: 2026-06-22T11:12:40+00:00
+- git commit: f813b12
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_proxy.py --steps 800 --log-every 20 `
+- output path: `outputs/task2/proxy_act_summary.json`
+- log: `logs/act_proxy_train_20260622_111216.log`
+- success: yes
+- duration_sec: 24
+- gpu note: see nvidia-smi snapshots in the log
+
+## act_proxy_train_style_marker
+- start: 2026-06-22T11:13:29+00:00
+- end: 2026-06-22T11:13:43+00:00
+- git commit: f813b12
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_proxy.py --steps 800 --log-every 20 `
+- output path: `outputs/task2/proxy_act_summary.json`
+- log: `logs/act_proxy_train_style_marker_20260622_111329.log`
+- success: yes
+- duration_sec: 14
+- gpu note: see nvidia-smi snapshots in the log

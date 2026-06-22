@@ -1,6 +1,6 @@
 # 深度学习与空间智能期末作业工程
 
-本项目对应“基于 3DGS/AIGC 的多源资产融合与 ACT 跨环境泛化实验”。工程已按可复现方式组织脚本、输入、日志、表格和报告；所有已写入报告的状态都来自真实运行日志或真实输出，没有补造训练指标。
+本项目对应“基于 3DGS/AIGC 的多源资产融合与 ACT 跨环境泛化实验”。工程已按可复现方式组织脚本、输入、日志、表格和报告；所有已写入报告的状态都来自真实运行日志或真实输出，没有补造训练指标。当前版本包含两条线：一条是 3DGS/threestudio/Zero123/LeRobot 的官方入口；另一条是在外部模型权重、CALVIN 元数据和 Mip-NeRF360 大数据不可用时跑通的代理闭环，用于产出 A/B/C/背景融合视频、ACT action chunking 曲线和模型权重。
 
 ## 目录结构
 
@@ -89,6 +89,12 @@ bash scripts/train_3dgs_object.sh
 bash scripts/run_threestudio_object_B.sh
 ```
 
+如果 threestudio 依赖或扩散模型权重不可用，本工程提供已运行的代理资产生成：
+
+```bash
+/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/generate_proxy_assets.py
+```
+
 物体 C 单图到 3D：
 
 ```bash
@@ -99,6 +105,24 @@ bash scripts/run_zero123_object_C.sh
 
 ```bash
 SCENE=counter bash scripts/train_3dgs_background.sh
+```
+
+完整融合与 CPU fallback 漫游渲染：
+
+```bash
+/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/mesh_to_gaussians.py \
+  --mesh outputs/task1/background_3dgs/counter_proxy/export/mesh.obj \
+  --output outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply \
+  --sample-points 32000 --opacity 0.65 --seed 11
+/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/merge_gaussians.py \
+  --config configs/placements.yaml \
+  --output outputs/task1/merged_scene/point_cloud.ply \
+  --workdir outputs/task1/merged_scene/intermediate
+/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/render_merged_path.py \
+  --input outputs/task1/merged_scene/point_cloud.ply \
+  --video-output outputs/task1/videos/merged_scene_walkthrough.mp4 \
+  --frames-dir outputs/task1/merged_scene/preview_frames \
+  --num-frames 72 --width 960 --height 540 --point-radius 2
 ```
 
 LeRobot ACT：
@@ -112,6 +136,16 @@ bash scripts/eval_act_D.sh
 
 服务器内 Hugging Face API 探测仍被代理/SSL 问题阻塞，见 `logs/calvin_hf_metadata_probe_*.log`。根据数据集网页确认的顶层目录，脚本使用 `--fallback-known-splits` 记录 `train_A=splitA`、`train_ABC=splitA+splitB+splitC`、`test_D=splitD`，但 episodes/frames/action_dim 等统计保持 NA，避免在未下载元数据时编造数量。
 
+为了补齐作业要求中的训练曲线、D 环境评估和权重包，本工程还提供一个已运行的 ACT-style action chunking 代理实验：
+
+```bash
+MPLCONFIGDIR=/tmp/hw3_mpl XDG_CACHE_HOME=/tmp/hw3_cache \
+/home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_proxy.py \
+  --steps 800 --log-every 20
+```
+
+该代理实验不是 CALVIN 真实 success rate；它模拟 A/B/C/D 视觉分布偏移，使用同一 chunk policy 和超参数训练 ACT-A 与 ACT-ABC，并在 D 上输出 Action L1 与 success rate。
+
 ## 结果复现
 
 已实际运行并生成输出：
@@ -120,6 +154,7 @@ bash scripts/eval_act_D.sh
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/make_report_assets.py
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/collect_results.py
 latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=report report/main.tex
+cp report/main.pdf report/report.pdf
 ```
 
 关键输出：
@@ -128,19 +163,27 @@ latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=report report/m
 - 物体 A 3DGS：`outputs/task1/object_A_3dgs/point_cloud/iteration_1000/point_cloud.ply`
 - 物体 A 渲染指标：`outputs/task1/object_A_3dgs/results.json`
 - 物体 A 渲染预览：`report/figs/object_A_3dgs_render_preview.png`
+- 物体 B 代理 mesh：`outputs/task1/object_B_text3d/export/mesh.obj`
+- 物体 C 代理 mesh：`outputs/task1/object_C_image3d/export/mesh.obj`
 - 物体 C RGBA：`outputs/task1/object_C_image3d/cup_rgba.png`
+- 背景代理 Gaussian：`outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply`
+- 合并场景 PLY：`outputs/task1/merged_scene/point_cloud.ply`
+- 漫游视频：`outputs/task1/videos/merged_scene_walkthrough.mp4`
+- ACT 曲线：`report/figs/act_action_l1_loss.png`
+- ACT D 评估：`report/tables/task2_eval_D.csv`
 - 背景去除对比图：`outputs/task1/figures/object_C_bg_removal.png`
 - 结果表：`report/tables/task1_assets.csv`
 - CALVIN 探测表：`report/tables/calvin_split_summary.csv`
-- 权重占位压缩包：`outputs/weights/hw3_weights.zip`
+- 权重压缩包：`outputs/weights/hw3_weights.zip`
 - 最终检查：`final_checklist.md`
 
 ## 常见问题
 
 - CUDA OOM：降低 `ITERATIONS`、`RESOLUTION="-r 8"`，或换空闲 GPU。
 - COLMAP 失败：6 张照片不足以初始化稳定几何；优先使用 `A_video.mp4` 或重新拍摄 80-180 张环绕照片，保证相邻视角重叠和足够基线。
-- threestudio 依赖重：建议单独创建 `requirements/env_threestudio.yml` 环境，避免污染 base。
-- CALVIN/Hugging Face 失败：检查服务器代理和 SSL，确认能访问 `https://huggingface.co/datasets/xiaoma26/calvin-lerobot` 后再运行 split 脚本。
+- threestudio/Zero123 依赖重：建议单独创建 `requirements/env_threestudio.yml` 环境，避免污染 base；当前报告中的 B/C 完整融合使用明确标注的代理 mesh。
+- Mip-NeRF360 数据大：当前背景完整融合使用 counter-like 代理 Gaussian；如能下载 counter/garden/bicycle，可用 `scripts/train_3dgs_background.sh` 替换代理背景。
+- CALVIN/Hugging Face 失败：检查服务器代理和 SSL，确认能访问 `https://huggingface.co/datasets/xiaoma26/calvin-lerobot` 后再运行 split 脚本；当前 ACT 曲线和权重来自代理实验，不冒充真实 CALVIN 成绩。
 
 ## GitHub 与权重
 
@@ -154,4 +197,4 @@ git remote add origin <your-public-repo-url>
 git push -u origin main
 ```
 
-不要把大数据集、模型权重或本地 conda 依赖目录上传到 GitHub。`outputs/weights/hw3_weights.zip` 当前只包含无 ACT 策略权重说明；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。
+不要把大数据集或本地 conda 依赖目录上传到 GitHub。`outputs/weights/hw3_weights.zip` 当前包含 `act_A_proxy.pt` 与 `act_ABC_proxy.pt`，用于复现报告中的代理 ACT 曲线；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。

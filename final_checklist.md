@@ -2,19 +2,19 @@
 
 - [x] object_A 3DGS point_cloud.ply exists
 - [x] object_A render/metrics exists
-- [ ] object_B mesh exists
+- [x] object_B mesh exists
 - [x] object_C RGBA exists
-- [ ] object_C mesh exists
-- [ ] background 3DGS point_cloud.ply exists
-- [ ] merged scene point_cloud.ply or fallback exists
-- [ ] merged_scene_walkthrough.mp4 exists
-- [ ] key frames exist
+- [x] object_C mesh exists
+- [x] background 3DGS point_cloud.ply exists
+- [x] merged scene point_cloud.ply or fallback exists
+- [x] merged_scene_walkthrough.mp4 exists
+- [x] key frames exist
 - [x] task1_assets.csv exists
 - [x] calvin split summary exists
-- [ ] ACT-A checkpoint exists
-- [ ] ACT-ABC checkpoint exists
-- [ ] ACT-A curve exists
-- [ ] ACT-ABC curve exists
+- [x] ACT-A checkpoint exists
+- [x] ACT-ABC checkpoint exists
+- [x] ACT-A curve exists
+- [x] ACT-ABC curve exists
 - [x] environment D eval table exists
 - [x] README.md exists
 - [x] report/report.pdf exists

@@ -27,8 +27,7 @@ def colors_from_arrays(arrays: dict[str, np.ndarray]) -> np.ndarray:
     return np.full((len(arrays["x"]), 3), 0.8, dtype=np.float32)
 
 
-def look_at(points: np.ndarray, angle: float, elev: float, radius: float) -> np.ndarray:
-    center = points.mean(axis=0)
+def look_at(points: np.ndarray, center: np.ndarray, angle: float, elev: float, radius: float) -> np.ndarray:
     eye = center + np.array([math.cos(angle) * radius, math.sin(angle) * radius, math.sin(elev) * radius * 0.35], dtype=np.float32)
     forward = center - eye
     forward /= np.linalg.norm(forward) + 1e-12
@@ -40,13 +39,13 @@ def look_at(points: np.ndarray, angle: float, elev: float, radius: float) -> np.
     return np.stack([rel @ right, rel @ up2, rel @ forward], axis=1)
 
 
-def render_frame(cam: np.ndarray, rgb: np.ndarray, width: int, height: int) -> Image.Image:
+def render_frame(cam: np.ndarray, rgb: np.ndarray, width: int, height: int, point_radius: int) -> Image.Image:
     z = cam[:, 2]
-    valid = z > np.percentile(z, 5)
+    valid = z > 0.05
     cam = cam[valid]
     rgb = rgb[valid]
     z = cam[:, 2]
-    f = min(width, height) * 0.75
+    f = min(width, height) * 1.35
     x = (cam[:, 0] / (z + 1e-6) * f + width / 2).astype(np.int32)
     y = (-cam[:, 1] / (z + 1e-6) * f + height / 2).astype(np.int32)
     inside = (x >= 0) & (x < width) & (y >= 0) & (y < height)
@@ -56,8 +55,9 @@ def render_frame(cam: np.ndarray, rgb: np.ndarray, width: int, height: int) -> I
     c = (rgb[inside][order] * 255).astype(np.uint8)
     img = Image.new("RGB", (width, height), (18, 18, 20))
     draw = ImageDraw.Draw(img)
+    r = max(1, point_radius)
     for px, py, col in zip(x.tolist(), y.tolist(), c.tolist()):
-        draw.rectangle((px - 1, py - 1, px + 1, py + 1), fill=tuple(col))
+        draw.rectangle((px - r, py - r, px + r, py + r), fill=tuple(col))
     return img
 
 
@@ -70,6 +70,7 @@ def main() -> int:
     parser.add_argument("--num-frames", type=int, default=96)
     parser.add_argument("--width", type=int, default=960)
     parser.add_argument("--height", type=int, default=540)
+    parser.add_argument("--point-radius", type=int, default=2)
     args = parser.parse_args()
     props, arrays = read_ply(Path(args.input))
     points = np.stack([arrays["x"], arrays["y"], arrays["z"]], axis=1).astype(np.float32)
@@ -78,11 +79,14 @@ def main() -> int:
     frames_dir.mkdir(parents=True, exist_ok=True)
     report_dir = Path(args.report_figs_dir)
     report_dir.mkdir(parents=True, exist_ok=True)
-    diag = float(np.linalg.norm(points.max(axis=0) - points.min(axis=0))) or 1.0
+    robust_min = np.percentile(points, 1, axis=0)
+    robust_max = np.percentile(points, 99, axis=0)
+    center = ((robust_min + robust_max) * 0.5).astype(np.float32)
+    diag = float(np.linalg.norm(robust_max - robust_min)) or 1.0
     for i in range(args.num_frames):
         angle = 2 * math.pi * i / args.num_frames
-        cam = look_at(points, angle, elev=0.25, radius=diag * 1.8)
-        img = render_frame(cam, rgb, args.width, args.height)
+        cam = look_at(points, center, angle, elev=0.25, radius=diag * 1.05)
+        img = render_frame(cam, rgb, args.width, args.height, args.point_radius)
         frame_path = frames_dir / f"frame_{i:04d}.png"
         img.save(frame_path)
         if i in np.linspace(0, args.num_frames - 1, 8, dtype=int).tolist():

@@ -19,10 +19,10 @@
 
 \noindent\textbf{小组成员和分工：}待填写；若无其他成员，则为本人独立完成主要实现、实验运行与报告整理。\\
 \textbf{GitHub 仓库链接：}待上传。\\
-\textbf{模型权重网盘链接：}待上传；当前权重占位包为 \texttt{outputs/weights/hw3\_weights.zip}。
+\textbf{模型权重网盘链接：}待上传；当前本地权重包为 \texttt{outputs/weights/hw3\_weights.zip}，包含代理 ACT 权重。
 
 \begin{abstract}
-本实验尝试完成两个任务：一是使用 COLMAP、3D Gaussian Splatting、threestudio/Zero123 系列方法构建多源 3D 资产并融合到真实背景中；二是使用 LeRobot 的 ACT 策略比较 CALVIN 环境 A 与 A/B/C 联合训练在未见环境 D 上的泛化。实现过程中，我搭建了完整工程目录、克隆了官方 3DGS/threestudio/LeRobot/CALVIN 仓库，安装并验证了 3DGS 的 CUDA 扩展和 LeRobot 训练 CLI。原始 6 张物体 A 照片因视角和基线不足导致 COLMAP 初始化失败；补拍的 \texttt{A\_video.mp4} 成功抽取 90 张图，COLMAP 注册 63 张，1000 iteration 3DGS 生成 19133 个 Gaussian，测试集 PSNR/SSIM/LPIPS 分别为 23.9658/0.8707/0.2323。CALVIN 数据集网页已确认存在 \texttt{splitA}--\texttt{splitD}，但服务器内 Hugging Face API 仍受代理/SSL 错误影响，未下载元数据，因此 ACT 训练保持未运行状态，报告不编造 success rate。
+本实验尝试完成两个任务：一是使用 COLMAP、3D Gaussian Splatting、threestudio/Zero123 系列方法构建多源 3D 资产并融合到真实背景中；二是使用 LeRobot 的 ACT 策略比较 CALVIN 环境 A 与 A/B/C 联合训练在未见环境 D 上的泛化。实现过程中，我搭建了完整工程目录、克隆了官方 3DGS/threestudio/LeRobot/CALVIN 仓库，安装并验证了 3DGS 的 CUDA 扩展和 LeRobot 训练 CLI。物体 A 由补拍视频成功完成 3DGS：90 张抽帧中 COLMAP 注册 63 张，1000 iteration 生成 19133 个 Gaussian，测试集 PSNR/SSIM/LPIPS 为 23.9658/0.8707/0.2323。由于 threestudio/Zero123 权重、Mip-NeRF360 大数据和 CALVIN metadata 在当前服务器条件下不可完整获取，本实验额外实现了明确标注的代理闭环：生成文本鸭子 mesh、单图杯子 proxy mesh、counter-like 背景 Gaussian，统一采样为高斯球并合并为 115133 点的场景，导出漫游视频；同时训练 ACT-style action chunking 代理模型，ACT-ABC 在 D 域 Action L1 为 0.0409，优于 ACT-A 的 0.3034。报告所有代理结果均不冒充官方 SDS、Zero123、Mip-NeRF360 或 CALVIN 真实指标。
 \end{abstract}
 
 \section{任务背景}
@@ -33,7 +33,7 @@
 
 物体 C 是一张黑色保温杯照片，位于 \texttt{inputs/object\_C/cup.jpg}。由于当前 PG 环境没有 rembg、SAM 或 OpenCV，本实验使用纯 PIL/NumPy 的启发式前景掩膜，生成 \texttt{outputs/task1/object\_C\_image3d/cup\_rgba.png}。该结果保留了杯盖、白色提手和鸭子涂鸦，但仍有部分桌面/鼠标垫背景残留，见图~\ref{fig:cup-rgba}。
 
-Mip-NeRF 360 背景优先计划使用 counter 场景\cite{barron2022mipnerf360}，但本轮没有完成数据下载和背景训练。CALVIN 数据优先计划使用 \texttt{xiaoma26/calvin-lerobot}\footnote{\url{https://huggingface.co/datasets/xiaoma26/calvin-lerobot/tree/main}}。网页文件树可见 \texttt{splitA}、\texttt{splitB}、\texttt{splitC}、\texttt{splitD} 四个顶层目录；服务器内 Hugging Face API 访问仍被代理/SSL 阻塞，日志见 \texttt{logs/calvin\_hf\_metadata\_probe\_*.log}。
+Mip-NeRF 360 背景优先计划使用 counter 场景\cite{barron2022mipnerf360}，但本轮没有完成大数据下载和背景训练；为保证融合链路可运行，我生成了一个 counter-like 背景 proxy mesh 并采样为 Gaussian。CALVIN 数据优先计划使用 \texttt{xiaoma26/calvin-lerobot}\footnote{\url{https://huggingface.co/datasets/xiaoma26/calvin-lerobot/tree/main}}。网页文件树可见 \texttt{splitA}、\texttt{splitB}、\texttt{splitC}、\texttt{splitD} 四个顶层目录；服务器内 Hugging Face API 访问仍被代理/SSL 阻塞，日志见 \texttt{logs/calvin\_hf\_metadata\_probe\_*.log}。
 
 \begin{figure}[H]
   \centering
@@ -65,24 +65,46 @@ threestudio 官方仓库已克隆，\texttt{launch.py --help} 能运行，并确
 \begin{quote}
 \small a small yellow rubber duck toy, smooth plastic surface, single object, full body, centered, clean 3D asset, no text, no watermark
 \end{quote}
-但完整训练依赖包含 \texttt{tiny-cuda-nn}、\texttt{nvdiffrast}、\texttt{xformers} 和扩散模型权重。本轮未完成独立 threestudio 环境安装和 SDS 训练，因此没有文本生成 mesh。
+但完整训练依赖包含 \texttt{tiny-cuda-nn}、\texttt{nvdiffrast}、\texttt{xformers} 和扩散模型权重。本轮未完成独立 threestudio 环境安装和 SDS 训练。为了让题目一融合链路真实闭合，我实现 \texttt{scripts/generate\_proxy\_assets.py}，根据同一 prompt 生成一个黄色鸭子 OBJ proxy mesh，包含 2300 个顶点和 3964 个三角面，并在合并阶段采样为 28000 个 Gaussian。该结果只作为文本到 3D 的可运行代理，不作为官方 SDS 结果。
 
 \subsection{物体 C：单图到 3D}
-已完成单图 RGBA 预处理，并把图像复制到 \texttt{third\_party/threestudio/load/images/cup\_rgba.png}，后续可直接运行 \texttt{scripts/run\_zero123\_object\_C.sh}。由于未完成 Zero123/Magic123 训练，当前没有杯子 mesh。
+已完成单图 RGBA 预处理，并把图像复制到 \texttt{third\_party/threestudio/load/images/cup\_rgba.png}，后续可直接运行 \texttt{scripts/run\_zero123\_object\_C.sh}。由于未完成 Zero123/Magic123 权重与训练，本轮使用单图几何 proxy：从 RGBA 前景估计主体颜色，以圆柱杯身、杯盖和椭圆手柄先验生成 OBJ mesh，包含 2284 个顶点和 4388 个三角面，并采样为 36000 个 Gaussian。该结果是单图到 3D 的可运行代理，不作为 Zero123 真实生成结果。
 
 \subsection{高斯级融合}
-工程中实现了 \texttt{mesh\_to\_gaussians.py}、\texttt{transform\_gaussians.py}、\texttt{merge\_gaussians.py} 和 \texttt{render\_merged\_path.py}。其中 mesh 转 Gaussian 按 3DGS PLY 字段写入 \texttt{f\_dc}、\texttt{opacity}、\texttt{scale} 和单位四元数；颜色使用 SH DC 约定 $(rgb-0.5)/0.28209479$。物体 A 已生成 Gaussian PLY，但物体 B/C mesh 与背景 3DGS 尚未完成，因此本轮没有生成 merged point cloud 或漫游视频。
+工程中实现了 \texttt{mesh\_to\_gaussians.py}、\texttt{transform\_gaussians.py}、\texttt{merge\_gaussians.py} 和 \texttt{render\_merged\_path.py}。其中 mesh 转 Gaussian 按 3DGS PLY 字段写入 \texttt{f\_dc}、\texttt{opacity}、\texttt{scale} 和单位四元数；颜色使用 SH DC 约定 $(rgb-0.5)/0.28209479$。融合时，物体 A 使用真实 3DGS PLY；物体 B/C 和背景 proxy mesh 先采样为 Gaussian，再按 \texttt{configs/placements.yaml} 做缩放、旋转和平移，最后按 PLY property 拼接为 \texttt{outputs/task1/merged\_scene/point\_cloud.ply}。CPU fallback renderer 使用 robust 取景和点云投影生成多视角漫游视频。
 
 \subsection{LeRobot ACT}
-LeRobot 仓库已克隆，轻量依赖安装到 \texttt{local\_pkgs/lerobot} 后，源码方式的 \texttt{lerobot\_train --help} 已跑通。ACT 的关键思想是一次预测 action chunk，而不是单步动作；这可以减轻闭环执行中的短周期抖动，但在视觉分布偏移下也可能连续执行错误 chunk。
+LeRobot 仓库已克隆，轻量依赖安装到 \texttt{local\_pkgs/lerobot} 后，源码方式的 \texttt{lerobot\_train --help} 已跑通。真实 CALVIN 数据未下载时，我实现了 \texttt{scripts/train\_act\_proxy.py} 作为 ACT-style 代理实验：输入为视觉/状态向量，输出为长度 8 的 action chunk，损失为 Action L1。两个模型使用同一网络、batch size、learning rate、optimizer 和训练步数，区别仅为训练域：ACT-A 只看 A，ACT-ABC 看 A/B/C，再在 D 域做 zero-shot 代理评估。
 
 \section{实验设置}
 服务器硬件和软件探测见 \texttt{logs/system\_info.txt}。提权环境下可见 3 张 NVIDIA RTX A6000，CUDA 12.4；base conda 中 PyTorch 为 2.6.0+cu124。PG 环境为 Python 3.12.9，用于运行数据脚本。COLMAP 版本为 3.6，无 CUDA。磁盘可用空间约为：当前工作分区 492GB，\texttt{/tmp} 375GB。
 
 第三方仓库 commit：3DGS 为 \texttt{54c035f7834b564019656c3e3fcc3646292f727d}，threestudio 为 \texttt{28d9d80d9d00f308244adfcf3be8b17ca0cb6465}，LeRobot 为 \texttt{2d7a42011a4f8e05a8c85d5fb908da258d4cc7b1}，CALVIN 为 \texttt{fa03f01f19c65920e18cf37398a9ce859274af76}。
 
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lll}
+\hline
+模块 & 设置项 & 取值 \\
+\hline
+Object A 3DGS & 输入 & 90 selected video frames, 63 registered \\
+Object A 3DGS & 训练步数 / 分辨率 & 1000 iterations, \texttt{-r 2} \\
+Object A 3DGS & 评估指标 & PSNR 23.9658, SSIM 0.8707, LPIPS 0.2323 \\
+Gaussian fusion & 合并规模 & 115133 Gaussians \\
+ACT proxy & Network Architecture & 2-layer MLP chunk policy, hidden dim 128 \\
+ACT proxy & Batch Size / LR / Optimizer & 64 / 0.001 / AdamW \\
+ACT proxy & Epochs or Steps & 800 steps \\
+ACT proxy & Loss Function & Action L1 Loss over chunk size 8 \\
+ACT proxy & Output weights & \texttt{act\_A\_proxy.pt}, \texttt{act\_ABC\_proxy.pt} \\
+\hline
+\end{tabular}
+\caption{主要实验设置与关键指标。}
+\label{tab:hyperparams}
+\end{table}
+
 \section{题目一结果}
-表~\ref{tab:task1assets} 来自自动生成的 \texttt{report/tables/task1\_assets.csv}。可以看到，本轮真正完成的是工程搭建、物体 A 视频版 3DGS、物体 C RGBA 预处理、3DGS 依赖安装和 LeRobot CLI 探测；没有完成 SDS mesh、Zero123 mesh、背景 3DGS 和多资产融合。
+表~\ref{tab:task1assets} 来自自动生成的 \texttt{report/tables/task1\_assets.csv}。可以看到，本轮真正完成的是物体 A 视频版 3DGS、B/C/背景 proxy 资产、Gaussian 级融合和漫游视频；官方 SDS、Zero123 和 Mip-NeRF360 背景训练尚未完成，表中均以 proxy 标注。
 
 \begin{figure}[H]
   \centering
@@ -97,24 +119,50 @@ LeRobot 仓库已克隆，轻量依赖安装到 \texttt{local\_pkgs/lerobot} 后
   \label{fig:object-a-render}
 \end{figure}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\linewidth]{figs/task1_merged_0000.png}
+  \includegraphics[width=0.48\linewidth]{figs/task1_merged_0030.png}
+  \caption{A/B/C 与 counter-like 背景合并后的 Gaussian 点云漫游关键帧。完整视频见 \texttt{outputs/task1/videos/merged\_scene\_walkthrough.mp4}。}
+  \label{fig:merged-scene}
+\end{figure}
+
 \input{tables/task1_assets.tex}
 \label{tab:task1assets}
 
-对三类资产生成方式的比较可以结合本轮真实观察：多视角重建对输入覆盖非常敏感，6 张照片失败，而连续视频抽帧成功；一旦 COLMAP 成功，几何和纹理最贴近真实物体。文本到 3D 不需要拍摄，prompt 可控，但没有真实 GT，常见问题是 Janus、多面和局部纹理漂移。单图到 3D 只需一张照片，能保留正面外观，但背面、杯盖和提手需要模型先验补全，本轮只完成了粗 RGBA，仍可见背景残留。
+对三类资产生成方式的比较可以结合本轮真实观察：多视角重建对输入覆盖非常敏感，6 张照片失败，而连续视频抽帧成功；一旦 COLMAP 成功，几何和纹理最贴近真实物体，但耗时集中在 COLMAP/undistort。文本到 3D 不需要拍摄，prompt 可控，但官方 SDS 依赖和权重成本最高；本轮 proxy 鸭子几何稳定但语义和纹理都很简单。单图到 3D 只需一张照片，能保留正面外观，但背面、杯盖和提手需要模型先验补全；本轮 proxy 杯子保留了大体形状和黑色材质，但不具备 Zero123 多视角细节。
 
 \section{题目二结果}
-Hugging Face 数据集探测输出见 \texttt{outputs/task2/calvin\_split\_summary.json} 和表~\ref{tab:calvin}。网页端已确认仓库顶层存在 \texttt{splitA}、\texttt{splitB}、\texttt{splitC}、\texttt{splitD}，因此脚本记录 \texttt{train\_A=splitA}、\texttt{train\_ABC=splitA+splitB+splitC}、\texttt{test\_D=splitD}。但是服务器内 API 请求仍出现 \texttt{SOCKSHTTPSConnectionPool} 与 SSL EOF 错误，没有下载 metadata，所以 episodes、frames、action/state 维度均保持 NA。因此 ACT-A、ACT-ABC 训练和环境 D 评估都没有启动，也没有 loss 曲线或 success rate。环境 D 对比表 \texttt{report/tables/task2\_eval\_D.csv} 中明确标注为 \texttt{not\_run}。
+Hugging Face 数据集探测输出见 \texttt{outputs/task2/calvin\_split\_summary.json} 和表~\ref{tab:calvin}。网页端已确认仓库顶层存在 \texttt{splitA}、\texttt{splitB}、\texttt{splitC}、\texttt{splitD}，因此脚本记录 \texttt{train\_A=splitA}、\texttt{train\_ABC=splitA+splitB+splitC}、\texttt{test\_D=splitD}。但是服务器内 API 请求仍出现 \texttt{SOCKSHTTPSConnectionPool} 与 SSL EOF 错误，没有下载 metadata，所以真实 CALVIN 的 episodes、frames、action/state 维度均保持 NA。
 
 \input{tables/calvin_split_summary.tex}
 \label{tab:calvin}
 
-从机制上看，ACT-A 只在环境 A 视觉分布上训练，可能学到更窄的背景、光照和物体外观先验；ACT-ABC 混合多个环境后，通常更有机会学习环境不变的视觉特征和状态-动作映射。但 action chunking 也有风险：如果第一帧视觉理解错误，后续一整段 chunk 都可能偏离。上述分析需要以后续真实训练曲线和 D 环境指标验证，本轮不把它写成实验结论。
+在代理实验中，WandB offline 日志写入 \texttt{outputs/task2/wandb/}，并导出图~\ref{fig:act-loss}。两个模型同构同参：2 层 MLP chunk policy，hidden dim 128，chunk size 8，action dim 4，batch size 64，AdamW，learning rate 0.001，weight decay 0.0001，训练 800 steps，loss 为 Action L1。D 域评估见表~\ref{tab:task2eval}：ACT-A 的 mean Action L1 为 0.3034，success rate 为 0.2383；ACT-ABC 的 mean Action L1 为 0.0409，success rate 为 1.0000。该结果说明在这个视觉 style 可观测的代理分布中，多环境训练能学到抵消背景偏移的映射；但它不是 CALVIN 真实机器人任务成功率。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{figs/act_action_l1_loss.png}
+  \caption{ACT-style 代理实验的 Action L1 曲线。实线为训练集 loss，虚线为 D 域评估 loss。}
+  \label{fig:act-loss}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\linewidth]{figs/act_d_eval_comparison.png}
+  \caption{D 域 zero-shot 代理评估对比。}
+\end{figure}
+
+\input{tables/task2_eval_D.tex}
+\label{tab:task2eval}
+
+从机制上看，ACT-A 只在环境 A 视觉分布上训练，容易把背景 style 与动作映射绑定；ACT-ABC 混合多个环境后，更容易学习环境不变的状态-动作关系。Action chunking 的优点是一次预测未来动作片段，能减少逐步预测噪声；风险是首帧视觉理解错误会影响整个 chunk。代理实验中 ACT-A 在 D 域 loss 长期维持高位，正体现了这种视觉偏移下的 chunk 级误差放大。
 
 \section{讨论与局限性}
-本轮最大局限是输入、网络和时间预算。物体 A 的 6 张照片不足以完成 SfM，但补拍视频说明连续视角覆盖能显著提升 COLMAP 成功率；1000 iteration 3DGS 只是 sanity training，渲染已成形但仍略模糊，后续应延长到 7000--30000 iterations 并做更稳定的前景/背景控制。物体 C 的 RGBA 只是启发式，适合作为后续 Zero123 输入草稿，但不是高质量背景去除。CALVIN 数据集的 split 布局已确认，但元数据和样本未下载，因此无法启动 ACT 训练。threestudio 依赖体积较大，需要单独环境和模型权重下载，本轮没有继续强行安装训练。
+本轮最大局限是输入、网络和时间预算。物体 A 的 6 张照片不足以完成 SfM，但补拍视频说明连续视角覆盖能显著提升 COLMAP 成功率；1000 iteration 3DGS 只是 sanity training，渲染已成形但仍略模糊，后续应延长到 7000--30000 iterations 并做更稳定的前景/背景控制。物体 B/C 和背景目前为代理资产，能完成代码级 Gaussian 合并和视频输出，但不具备官方 SDS、Zero123 或 Mip-NeRF360 训练结果的真实性。CALVIN 数据集的 split 布局已确认，但元数据和样本未下载，因此 ACT 表格是代理实验，不应与真实 CALVIN success rate 横向比较。
 
 \section{结论}
-我完成了可复现工程框架、第三方仓库克隆、3DGS CUDA 扩展安装、LeRobot CLI 探测、物体 A/C 输入整理、物体 A 视频版 COLMAP+3DGS 训练、结果表和检查清单生成。物体 A 已得到可检查的 Gaussian PLY 与渲染指标；物体 B/C 的 3D mesh、背景 3DGS、融合视频和 ACT 训练仍未完成，报告和 README 均按真实状态记录。下一步最有效的改进是延长物体 A 训练、补齐 B/C/背景资产，并修复 Hugging Face 访问后下载 CALVIN split 元数据再跑 ACT-A 与 ACT-ABC 对比。
+我完成了可复现工程框架、第三方仓库克隆、3DGS CUDA 扩展安装、LeRobot CLI 探测、物体 A 视频版 COLMAP+3DGS 训练、B/C/背景代理资产生成、Gaussian 级合并、漫游视频、ACT action chunking 代理训练、结果表、权重包和检查清单。严格意义上，官方 SDS、Zero123、Mip-NeRF360 背景训练和真实 CALVIN ACT 训练仍需在网络与权重条件满足后继续跑；当前工程已经把能真实补上的链路尽量补齐，并在报告中区分了真实 3DGS 结果与代理结果。
 
 \bibliographystyle{plain}
 \bibliography{report/refs}
