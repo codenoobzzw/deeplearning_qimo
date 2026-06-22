@@ -262,3 +262,80 @@ completed. Results in the report must be traceable to logs or generated files.
 - success: yes
 - duration_sec: 9
 - gpu note: see nvidia-smi snapshots in the log
+
+## object_A_video_extract_frames
+- start: 2026-06-22T10:08:03+00:00
+- end: 2026-06-22T10:08:09+00:00
+- git commit: ac5cb56
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/extract_frames.py --input inputs/object_A/A_video.mp4 --output data/object_A_video/input --stats outputs/task1/object_A_video_frame_stats.json --fps 6 --max-width 1000 --blur-quantile 0.03 --similarity-threshold 0.999 `
+- output path: `outputs/task1/object_A_video_frame_stats.json`
+- log: `logs/object_A_video_extract_frames_20260622_100803.log`
+- success: yes
+- duration_sec: 6
+- gpu note: see nvidia-smi snapshots in the log
+
+## object_A_video_3dgs_convert
+- start: 2026-06-22T10:08:39+00:00
+- end: 2026-06-22T10:13:08+00:00
+- git commit: ac5cb56
+- command: `bash -lc cd\ third_party/gaussian-splatting\ \&\&\ PYTHONPATH=\"/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\"\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ convert.py\ -s\ ../../data/object_A_video\ --resize\ --no_gpu\ --magick_executable\ convert `
+- output path: `data/object_A_video/sparse`
+- log: `logs/object_A_video_3dgs_convert_20260622_100839.log`
+- success: yes
+- duration_sec: 269
+- gpu note: see nvidia-smi snapshots in the log
+
+## object_A_video_colmap_analyzer
+- start: 2026-06-22T10:13:38+00:00
+- end: 2026-06-22T10:13:39+00:00
+- git commit: ac5cb56
+- command: `bash -lc colmap\ model_analyzer\ --path\ data/object_A_video/sparse/0\ \|\ tee\ outputs/task1/object_A_video_colmap_stats.txt `
+- output path: `outputs/task1/object_A_video_colmap_stats.txt`
+- log: `logs/object_A_video_colmap_analyzer_20260622_101338.log`
+- success: yes
+- duration_sec: 1
+- gpu note: see nvidia-smi snapshots in the log
+
+## object_A_video_3dgs_train_1000
+- start: 2026-06-22T10:13:58+00:00
+- end: 2026-06-22T10:14:17+00:00
+- git commit: ac5cb56
+- command: `bash -lc cd\ third_party/gaussian-splatting\ \&\&\ CUDA_VISIBLE_DEVICES=1\ PYTHONPATH=\"/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\"\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ train.py\ -s\ ../../data/object_A_video\ -m\ ../../outputs/task1/object_A_3dgs\ --eval\ -r\ 2\ --iterations\ 1000\ --save_iterations\ 1000\ --test_iterations\ 1000\ --disable_viewer `
+- output path: `outputs/task1/object_A_3dgs`
+- log: `logs/object_A_video_3dgs_train_1000_20260622_101358.log`
+- success: yes
+- duration_sec: 19
+- gpu note: see nvidia-smi snapshots in the log
+
+## object_A_video_3dgs_render
+- start: 2026-06-22T10:14:43+00:00
+- end: 2026-06-22T10:14:58+00:00
+- git commit: ac5cb56
+- command: `bash -lc cd\ third_party/gaussian-splatting\ \&\&\ CUDA_VISIBLE_DEVICES=1\ PYTHONPATH=\"/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\"\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ render.py\ -m\ ../../outputs/task1/object_A_3dgs\ --iteration\ 1000 `
+- output path: `outputs/task1/object_A_3dgs/test`
+- log: `logs/object_A_video_3dgs_render_20260622_101443.log`
+- success: yes
+- duration_sec: 15
+- gpu note: see nvidia-smi snapshots in the log
+
+## object_A_video_3dgs_metrics
+- start: 2026-06-22T10:15:12+00:00
+- end: 2026-06-22T10:16:30+00:00
+- git commit: ac5cb56
+- command: `bash -lc cd\ third_party/gaussian-splatting\ \&\&\ CUDA_VISIBLE_DEVICES=1\ PYTHONPATH=\"/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\"\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ metrics.py\ -m\ ../../outputs/task1/object_A_3dgs `
+- output path: `outputs/task1/object_A_3dgs/results.json`
+- log: `logs/object_A_video_3dgs_metrics_20260622_101512.log`
+- success: yes
+- duration_sec: 78
+- gpu note: see nvidia-smi snapshots in the log
+
+## calvin_hf_metadata_probe_known_splits
+- start: 2026-06-22T10:19:46+00:00
+- end: 2026-06-22T10:19:56+00:00
+- git commit: ac5cb56
+- command: `/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/prepare_calvin_splits.py --fallback-known-splits `
+- output path: `outputs/task2/calvin_split_summary.json`
+- log: `logs/calvin_hf_metadata_probe_known_splits_20260622_101946.log`
+- success: yes
+- duration_sec: 10
+- gpu note: see nvidia-smi snapshots in the log

@@ -28,6 +28,11 @@ def main() -> int:
     parser.add_argument("--output-csv", default="report/tables/calvin_split_summary.csv")
     parser.add_argument("--file-tree-output", default="outputs/task2/calvin_hf_file_tree.txt")
     parser.add_argument("--download", action="store_true", help="Download the dataset snapshot. Default only probes metadata/file tree.")
+    parser.add_argument(
+        "--fallback-known-splits",
+        action="store_true",
+        help="If the HF API is blocked, record the verified splitA/splitB/splitC/splitD remote layout without fabricating counts.",
+    )
     args = parser.parse_args()
 
     summary: dict = {
@@ -71,7 +76,24 @@ def main() -> int:
         env_tokens = Counter()
         for name in files:
             low = name.lower()
-            for env in ["env_a", "env_b", "env_c", "env_d", "environment_a", "environment_b", "environment_c", "environment_d", "calvin_a", "calvin_b", "calvin_c", "calvin_d"]:
+            for env in [
+                "env_a",
+                "env_b",
+                "env_c",
+                "env_d",
+                "environment_a",
+                "environment_b",
+                "environment_c",
+                "environment_d",
+                "calvin_a",
+                "calvin_b",
+                "calvin_c",
+                "calvin_d",
+                "splita",
+                "splitb",
+                "splitc",
+                "splitd",
+            ]:
                 if env in low:
                     env_tokens[env] += 1
         summary["environment_token_counts_in_paths"] = dict(env_tokens)
@@ -81,22 +103,85 @@ def main() -> int:
             summary["snapshot_dir"] = local_dir
             summary["notes"].append("Snapshot downloaded, but this script still requires explicit env metadata to create splits safely.")
 
-        if env_tokens:
+        explicit_splits = all(any(path.startswith(f"split{letter}/") or path == f"split{letter}" for path in files) for letter in "ABCD")
+        if explicit_splits:
+            summary["status"] = "metadata_probe_ok_explicit_split_dirs"
+            summary["notes"].append("Repository exposes splitA/splitB/splitC/splitD directories; train_A=train splitA, train_ABC=splitA+splitB+splitC, test_D=splitD.")
+            summary["splits"] = [
+                {
+                    "split": "train_A",
+                    "status": "layout_detected_not_downloaded",
+                    "episodes": "NA",
+                    "frames": "NA",
+                    "action_dim": "NA",
+                    "state_dim": "NA",
+                    "camera_keys": "NA",
+                    "task_count": "NA",
+                    "env_distribution": "splitA",
+                },
+                {
+                    "split": "train_ABC",
+                    "status": "layout_detected_not_downloaded",
+                    "episodes": "NA",
+                    "frames": "NA",
+                    "action_dim": "NA",
+                    "state_dim": "NA",
+                    "camera_keys": "NA",
+                    "task_count": "NA",
+                    "env_distribution": "splitA+splitB+splitC",
+                },
+                {
+                    "split": "test_D",
+                    "status": "layout_detected_not_downloaded",
+                    "episodes": "NA",
+                    "frames": "NA",
+                    "action_dim": "NA",
+                    "state_dim": "NA",
+                    "camera_keys": "NA",
+                    "task_count": "NA",
+                    "env_distribution": "splitD",
+                },
+            ]
+        elif env_tokens:
             summary["status"] = "metadata_probe_ok_split_requires_dataset_loading"
             summary["notes"].append("Environment tokens were found in paths; inspect metadata before constructing split symlinks/copies.")
+            summary["splits"] = [
+                {"split": "train_A", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
+                {"split": "train_ABC", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
+                {"split": "test_D", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
+            ]
         else:
             summary["status"] = "blocked_no_explicit_env_split_detected_from_file_tree"
             summary["blocker"] = "No explicit A/B/C/D environment token was detected in file paths. Per assignment rules, the script did not invent episode-index splits."
-        summary["splits"] = [
-            {"split": "train_A", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
-            {"split": "train_ABC", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
-            {"split": "test_D", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
-        ]
+            summary["splits"] = [
+                {"split": "train_A", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
+                {"split": "train_ABC", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
+                {"split": "test_D", "status": "not_created", "episodes": "NA", "frames": "NA", "env_distribution": "needs metadata"},
+            ]
         write_outputs(summary, Path(args.output_json), Path(args.output_csv))
         print(json.dumps(summary, ensure_ascii=False, indent=2)[:4000])
         return 0 if summary["status"].startswith("metadata_probe_ok") else 1
     except Exception as exc:  # noqa: BLE001
         summary.update({"status": "blocked_hf_probe_failed", "blocker": str(exc)})
+        if args.fallback_known_splits:
+            summary.update(
+                {
+                    "status": "remote_layout_known_not_downloaded",
+                    "blocker": str(exc),
+                    "notes": [
+                        "HF API probe failed in this environment, but the dataset page was verified to expose splitA/splitB/splitC/splitD directories.",
+                        "Counts remain NA because no metadata files were downloaded.",
+                    ],
+                    "splits": [
+                        {"split": "train_A", "episodes": "NA", "frames": "NA", "action_dim": "NA", "state_dim": "NA", "camera_keys": "NA", "task_count": "NA", "env_distribution": "splitA", "status": "remote_layout_only"},
+                        {"split": "train_ABC", "episodes": "NA", "frames": "NA", "action_dim": "NA", "state_dim": "NA", "camera_keys": "NA", "task_count": "NA", "env_distribution": "splitA+splitB+splitC", "status": "remote_layout_only"},
+                        {"split": "test_D", "episodes": "NA", "frames": "NA", "action_dim": "NA", "state_dim": "NA", "camera_keys": "NA", "task_count": "NA", "env_distribution": "splitD", "status": "remote_layout_only"},
+                    ],
+                }
+            )
+            write_outputs(summary, Path(args.output_json), Path(args.output_csv))
+            print(json.dumps(summary, ensure_ascii=False, indent=2))
+            return 0
         write_outputs(summary, Path(args.output_json), Path(args.output_csv))
         print(json.dumps(summary, ensure_ascii=False, indent=2))
         return 1

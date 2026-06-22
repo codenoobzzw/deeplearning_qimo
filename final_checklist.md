@@ -1,7 +1,7 @@
 # Final Checklist
 
-- [ ] object_A 3DGS point_cloud.ply exists
-- [ ] object_A render/metrics exists
+- [x] object_A 3DGS point_cloud.ply exists
+- [x] object_A render/metrics exists
 - [ ] object_B mesh exists
 - [x] object_C RGBA exists
 - [ ] object_C mesh exists

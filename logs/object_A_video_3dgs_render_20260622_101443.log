@@ -1,0 +1,226 @@
+# object_A_video_3dgs_render
+start: 2026-06-22T10:14:43+00:00
+project_root: /home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project
+git_commit: ac5cb56
+expected_output: outputs/task1/object_A_3dgs/test
+command: bash -lc cd\ third_party/gaussian-splatting\ \&\&\ CUDA_VISIBLE_DEVICES=1\ PYTHONPATH=\"/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\"\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ render.py\ -m\ ../../outputs/task1/object_A_3dgs\ --iteration\ 1000 
+
+## nvidia-smi before
+Mon Jun 22 10:14:43 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 35%   63C    P2            124W /  300W |    4908MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   36C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+## command output
+
+Rendering progress:   0%|          | 0/55 [00:00<?, ?it/s]
+Rendering progress:   2%|▏         | 1/55 [00:00<00:11,  4.68it/s]
+Rendering progress:   4%|▎         | 2/55 [00:00<00:07,  6.81it/s]
+Rendering progress:   7%|▋         | 4/55 [00:00<00:06,  8.46it/s]
+Rendering progress:   9%|▉         | 5/55 [00:00<00:05,  8.78it/s]
+Rendering progress:  11%|█         | 6/55 [00:00<00:05,  8.97it/s]
+Rendering progress:  13%|█▎        | 7/55 [00:00<00:05,  8.98it/s]
+Rendering progress:  15%|█▍        | 8/55 [00:00<00:05,  9.10it/s]
+Rendering progress:  16%|█▋        | 9/55 [00:01<00:04,  9.24it/s]
+Rendering progress:  18%|█▊        | 10/55 [00:01<00:04,  9.28it/s]
+Rendering progress:  20%|██        | 11/55 [00:01<00:04,  9.26it/s]
+Rendering progress:  22%|██▏       | 12/55 [00:01<00:04,  9.27it/s]
+Rendering progress:  24%|██▎       | 13/55 [00:01<00:04,  9.28it/s]
+Rendering progress:  25%|██▌       | 14/55 [00:01<00:04,  9.32it/s]
+Rendering progress:  27%|██▋       | 15/55 [00:01<00:04,  9.33it/s]
+Rendering progress:  29%|██▉       | 16/55 [00:01<00:04,  9.47it/s]
+Rendering progress:  31%|███       | 17/55 [00:01<00:04,  9.46it/s]
+Rendering progress:  33%|███▎      | 18/55 [00:02<00:03,  9.47it/s]
+Rendering progress:  35%|███▍      | 19/55 [00:02<00:03,  9.51it/s]
+Rendering progress:  36%|███▋      | 20/55 [00:02<00:03,  9.61it/s]
+Rendering progress:  38%|███▊      | 21/55 [00:02<00:03,  9.66it/s]
+Rendering progress:  42%|████▏     | 23/55 [00:02<00:03, 10.18it/s]
+Rendering progress:  45%|████▌     | 25/55 [00:02<00:02, 10.55it/s]
+Rendering progress:  49%|████▉     | 27/55 [00:02<00:02, 10.88it/s]
+Rendering progress:  53%|█████▎    | 29/55 [00:03<00:02, 10.70it/s]
+Rendering progress:  56%|█████▋    | 31/55 [00:03<00:02,  9.55it/s]
+Rendering progress:  58%|█████▊    | 32/55 [00:03<00:02,  8.96it/s]
+Rendering progress:  60%|██████    | 33/55 [00:03<00:02,  8.49it/s]
+Rendering progress:  62%|██████▏   | 34/55 [00:03<00:02,  8.16it/s]
+Rendering progress:  64%|██████▎   | 35/55 [00:03<00:02,  7.96it/s]
+Rendering progress:  65%|██████▌   | 36/55 [00:03<00:02,  7.79it/s]
+Rendering progress:  67%|██████▋   | 37/55 [00:04<00:02,  7.83it/s]
+Rendering progress:  69%|██████▉   | 38/55 [00:04<00:02,  7.97it/s]
+Rendering progress:  71%|███████   | 39/55 [00:04<00:01,  8.04it/s]
+Rendering progress:  73%|███████▎  | 40/55 [00:04<00:01,  8.22it/s]
+Rendering progress:  75%|███████▍  | 41/55 [00:04<00:01,  8.42it/s]
+Rendering progress:  76%|███████▋  | 42/55 [00:04<00:01,  8.53it/s]
+Rendering progress:  78%|███████▊  | 43/55 [00:04<00:01,  8.36it/s]
+Rendering progress:  80%|████████  | 44/55 [00:04<00:01,  8.45it/s]
+Rendering progress:  82%|████████▏ | 45/55 [00:05<00:01,  8.67it/s]
+Rendering progress:  84%|████████▎ | 46/55 [00:05<00:01,  8.70it/s]
+Rendering progress:  85%|████████▌ | 47/55 [00:05<00:00,  8.70it/s]
+Rendering progress:  87%|████████▋ | 48/55 [00:05<00:00,  8.65it/s]
+Rendering progress:  89%|████████▉ | 49/55 [00:05<00:00,  8.68it/s]
+Rendering progress:  91%|█████████ | 50/55 [00:05<00:00,  8.93it/s]
+Rendering progress:  95%|█████████▍| 52/55 [00:05<00:00,  9.47it/s]
+Rendering progress:  98%|█████████▊| 54/55 [00:06<00:00,  9.66it/s]
+Rendering progress: 100%|██████████| 55/55 [00:06<00:00,  9.70it/s]
+Rendering progress: 100%|██████████| 55/55 [00:06<00:00,  9.00it/s]
+
+Rendering progress:   0%|          | 0/8 [00:00<?, ?it/s]
+Rendering progress:  25%|██▌       | 2/8 [00:00<00:00, 10.13it/s]
+Rendering progress:  50%|█████     | 4/8 [00:00<00:00,  9.84it/s]
+Rendering progress:  75%|███████▌  | 6/8 [00:00<00:00,  9.25it/s]
+Rendering progress:  88%|████████▊ | 7/8 [00:00<00:00,  8.92it/s]
+Rendering progress: 100%|██████████| 8/8 [00:00<00:00,  8.89it/s]
+Rendering progress: 100%|██████████| 8/8 [00:00<00:00,  9.15it/s]
+
+Looking for config file in ../../outputs/task1/object_A_3dgs/cfg_args
+Config file found: ../../outputs/task1/object_A_3dgs/cfg_args
+Rendering ../../outputs/task1/object_A_3dgs
+Loading trained model at iteration 1000 [22/06 10:14:49]
+------------LLFF HOLD------------- [22/06 10:14:49]
+
+Reading camera 1/63
+Reading camera 2/63
+Reading camera 3/63
+Reading camera 4/63
+Reading camera 5/63
+Reading camera 6/63
+Reading camera 7/63
+Reading camera 8/63
+Reading camera 9/63
+Reading camera 10/63
+Reading camera 11/63
+Reading camera 12/63
+Reading camera 13/63
+Reading camera 14/63
+Reading camera 15/63
+Reading camera 16/63
+Reading camera 17/63
+Reading camera 18/63
+Reading camera 19/63
+Reading camera 20/63
+Reading camera 21/63
+Reading camera 22/63
+Reading camera 23/63
+Reading camera 24/63
+Reading camera 25/63
+Reading camera 26/63
+Reading camera 27/63
+Reading camera 28/63
+Reading camera 29/63
+Reading camera 30/63
+Reading camera 31/63
+Reading camera 32/63
+Reading camera 33/63
+Reading camera 34/63
+Reading camera 35/63
+Reading camera 36/63
+Reading camera 37/63
+Reading camera 38/63
+Reading camera 39/63
+Reading camera 40/63
+Reading camera 41/63
+Reading camera 42/63
+Reading camera 43/63
+Reading camera 44/63
+Reading camera 45/63
+Reading camera 46/63
+Reading camera 47/63
+Reading camera 48/63
+Reading camera 49/63
+Reading camera 50/63
+Reading camera 51/63
+Reading camera 52/63
+Reading camera 53/63
+Reading camera 54/63
+Reading camera 55/63
+Reading camera 56/63
+Reading camera 57/63
+Reading camera 58/63
+Reading camera 59/63
+Reading camera 60/63
+Reading camera 61/63
+Reading camera 62/63
+Reading camera 63/63 [22/06 10:14:49]
+Loading Training Cameras [22/06 10:14:49]
+Loading Test Cameras [22/06 10:14:50]
+
+	Command being timed: "bash -lc cd third_party/gaussian-splatting && CUDA_VISIBLE_DEVICES=1 PYTHONPATH="/home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project/local_pkgs/3dgs" /home/zhangzhiwei/miniconda3/bin/conda run -n base python render.py -m ../../outputs/task1/object_A_3dgs --iteration 1000"
+	User time (seconds): 136.45
+	System time (seconds): 7.98
+	Percent of CPU this job got: 993%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:14.54
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1444296
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 28
+	Minor (reclaiming a frame) page faults: 610902
+	Voluntary context switches: 15131
+	Involuntary context switches: 4562125
+	Swaps: 0
+	File system inputs: 3472
+	File system outputs: 42520
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+## nvidia-smi after
+Mon Jun 22 10:14:58 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 35%   66C    P2            131W /  300W |    4908MiB /  49140MiB |     95%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   39C    P0             74W /  300W |       3MiB /  49140MiB |      6%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+status: 0
+end: 2026-06-22T10:14:58+00:00
+duration_sec: 15

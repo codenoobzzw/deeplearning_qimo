@@ -4,7 +4,7 @@
 
 ## 目录结构
 
-- `inputs/`: 学生上传的物体 A 多视角照片、物体 C 杯子照片。
+- `inputs/`: 学生上传的物体 A 多视角照片/视频、物体 C 杯子照片。
 - `data/`: 预处理后的 COLMAP/3DGS/CALVIN 数据目录。
 - `third_party/`: 官方 `gaussian-splatting`、`threestudio`、`lerobot`、`calvin` 仓库。
 - `scripts/`: 数据准备、训练入口、Gaussian/Mesh 转换、结果收集脚本。
@@ -23,10 +23,11 @@
 
 ## 数据准备
 
-物体 A 原始照片已放入：
+物体 A 原始照片和后续补拍视频已放入：
 
 ```bash
 inputs/object_A/
+inputs/object_A/A_video.mp4
 ```
 
 物体 C 杯子照片已放入：
@@ -39,6 +40,11 @@ inputs/object_C/cup.jpg
 
 ```bash
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/extract_frames.py
+/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/extract_frames.py \
+  --input inputs/object_A/A_video.mp4 \
+  --output data/object_A_video/input \
+  --stats outputs/task1/object_A_video_frame_stats.json \
+  --fps 6 --blur-quantile 0.03 --similarity-threshold 0.999
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/preprocess_object_c.py
 ```
 
@@ -75,7 +81,7 @@ LeRobot 轻量依赖安装后，`lerobot_train --help` 已可通过源码模块�
 bash scripts/train_3dgs_object.sh
 ```
 
-注意：本次 COLMAP 两轮 mapper 和 patched official convert 均失败，原因是 `No good initial image pair found`，因此没有合法 sparse model，3DGS 训练没有启动。
+本次 6 张原始照片的 COLMAP baseline 仍失败，原因是 `No good initial image pair found`；补拍的 `A_video.mp4` 解决了视角覆盖问题。默认脚本现在使用 `data/object_A_video`，可通过 `SOURCE_DIR`、`OUTPUT_DIR`、`ITERATIONS` 覆盖。已完成的 sanity run 为 90 张抽帧、63 张注册、19133 个 Gaussian、1000 iterations，测试集指标为 PSNR 23.9658、SSIM 0.8707、LPIPS 0.2323。
 
 物体 B 文本到 3D：
 
@@ -98,13 +104,13 @@ SCENE=counter bash scripts/train_3dgs_background.sh
 LeRobot ACT：
 
 ```bash
-/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/prepare_calvin_splits.py
+/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/prepare_calvin_splits.py --fallback-known-splits
 bash scripts/train_act_A.sh
 bash scripts/train_act_ABC.sh
 bash scripts/eval_act_D.sh
 ```
 
-本次 Hugging Face 数据探测被代理/SSL 问题阻塞，见 `logs/calvin_hf_metadata_probe_*.log`。脚本没有按 episode index 臆造 A/B/C/D 切分。
+服务器内 Hugging Face API 探测仍被代理/SSL 问题阻塞，见 `logs/calvin_hf_metadata_probe_*.log`。根据数据集网页确认的顶层目录，脚本使用 `--fallback-known-splits` 记录 `train_A=splitA`、`train_ABC=splitA+splitB+splitC`、`test_D=splitD`，但 episodes/frames/action_dim 等统计保持 NA，避免在未下载元数据时编造数量。
 
 ## 结果复现
 
@@ -119,6 +125,9 @@ latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=report report/m
 关键输出：
 
 - 报告：`report/report.pdf`
+- 物体 A 3DGS：`outputs/task1/object_A_3dgs/point_cloud/iteration_1000/point_cloud.ply`
+- 物体 A 渲染指标：`outputs/task1/object_A_3dgs/results.json`
+- 物体 A 渲染预览：`report/figs/object_A_3dgs_render_preview.png`
 - 物体 C RGBA：`outputs/task1/object_C_image3d/cup_rgba.png`
 - 背景去除对比图：`outputs/task1/figures/object_C_bg_removal.png`
 - 结果表：`report/tables/task1_assets.csv`
@@ -129,7 +138,7 @@ latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=report report/m
 ## 常见问题
 
 - CUDA OOM：降低 `ITERATIONS`、`RESOLUTION="-r 8"`，或换空闲 GPU。
-- COLMAP 失败：增加物体 A 环绕照片到 80-180 张，保证相邻视角重叠和足够基线；当前 6 张照片不足以初始化稳定几何。
+- COLMAP 失败：6 张照片不足以初始化稳定几何；优先使用 `A_video.mp4` 或重新拍摄 80-180 张环绕照片，保证相邻视角重叠和足够基线。
 - threestudio 依赖重：建议单独创建 `requirements/env_threestudio.yml` 环境，避免污染 base。
 - CALVIN/Hugging Face 失败：检查服务器代理和 SSL，确认能访问 `https://huggingface.co/datasets/xiaoma26/calvin-lerobot` 后再运行 split 脚本。
 
@@ -145,4 +154,4 @@ git remote add origin <your-public-repo-url>
 git push -u origin main
 ```
 
-不要把大数据集、模型权重或本地 conda 依赖目录上传到 GitHub。`outputs/weights/hw3_weights.zip` 当前只包含无训练权重说明，需要你后续上传网盘并替换报告链接。
+不要把大数据集、模型权重或本地 conda 依赖目录上传到 GitHub。`outputs/weights/hw3_weights.zip` 当前只包含无 ACT 策略权重说明；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。

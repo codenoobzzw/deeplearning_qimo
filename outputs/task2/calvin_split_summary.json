@@ -1,7 +1,44 @@
 {
   "repo_id": "xiaoma26/calvin-lerobot",
-  "status": "blocked_hf_probe_failed",
-  "splits": [],
-  "notes": [],
-  "blocker": "(MaxRetryError(\"SOCKSHTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/datasets/xiaoma26/calvin-lerobot (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))\"), '(Request ID: fd522f97-a861-43df-9d81-ccfd266de131)')"
+  "status": "remote_layout_known_not_downloaded",
+  "splits": [
+    {
+      "split": "train_A",
+      "episodes": "NA",
+      "frames": "NA",
+      "action_dim": "NA",
+      "state_dim": "NA",
+      "camera_keys": "NA",
+      "task_count": "NA",
+      "env_distribution": "splitA",
+      "status": "remote_layout_only"
+    },
+    {
+      "split": "train_ABC",
+      "episodes": "NA",
+      "frames": "NA",
+      "action_dim": "NA",
+      "state_dim": "NA",
+      "camera_keys": "NA",
+      "task_count": "NA",
+      "env_distribution": "splitA+splitB+splitC",
+      "status": "remote_layout_only"
+    },
+    {
+      "split": "test_D",
+      "episodes": "NA",
+      "frames": "NA",
+      "action_dim": "NA",
+      "state_dim": "NA",
+      "camera_keys": "NA",
+      "task_count": "NA",
+      "env_distribution": "splitD",
+      "status": "remote_layout_only"
+    }
+  ],
+  "notes": [
+    "HF API probe failed in this environment, but the dataset page was verified to expose splitA/splitB/splitC/splitD directories.",
+    "Counts remain NA because no metadata files were downloaded."
+  ],
+  "blocker": "(MaxRetryError(\"SOCKSHTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/datasets/xiaoma26/calvin-lerobot (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))\"), '(Request ID: 392d00e0-fcf7-491a-a76f-236d47882984)')"
 }

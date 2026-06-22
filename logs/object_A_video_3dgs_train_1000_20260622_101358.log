@@ -1,0 +1,331 @@
+# object_A_video_3dgs_train_1000
+start: 2026-06-22T10:13:58+00:00
+project_root: /home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project
+git_commit: ac5cb56
+expected_output: outputs/task1/object_A_3dgs
+command: bash -lc cd\ third_party/gaussian-splatting\ \&\&\ CUDA_VISIBLE_DEVICES=1\ PYTHONPATH=\"/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\"\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ train.py\ -s\ ../../data/object_A_video\ -m\ ../../outputs/task1/object_A_3dgs\ --eval\ -r\ 2\ --iterations\ 1000\ --save_iterations\ 1000\ --test_iterations\ 1000\ --disable_viewer 
+
+## nvidia-smi before
+Mon Jun 22 10:13:58 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 35%   63C    P2            118W /  300W |    4908MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   34C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+## command output
+
+Training progress:   0%|          | 0/1000 [00:00<?, ?it/s]
+Training progress:   0%|          | 0/1000 [00:01<?, ?it/s, Loss=0.2829515, Depth Loss=0.0000000]
+Training progress:   1%|          | 10/1000 [00:01<01:56,  8.53it/s, Loss=0.2829515, Depth Loss=0.0000000]
+Training progress:   1%|          | 10/1000 [00:01<01:56,  8.53it/s, Loss=0.2391185, Depth Loss=0.0000000]
+Training progress:   2%|▏         | 20/1000 [00:01<01:54,  8.53it/s, Loss=0.2490331, Depth Loss=0.0000000]
+Training progress:   3%|▎         | 30/1000 [00:01<00:36, 26.55it/s, Loss=0.2490331, Depth Loss=0.0000000]
+Training progress:   3%|▎         | 30/1000 [00:01<00:36, 26.55it/s, Loss=0.2074805, Depth Loss=0.0000000]
+Training progress:   4%|▍         | 40/1000 [00:01<00:36, 26.55it/s, Loss=0.2230799, Depth Loss=0.0000000]
+Training progress:   5%|▌         | 50/1000 [00:01<00:22, 42.84it/s, Loss=0.2230799, Depth Loss=0.0000000]
+Training progress:   5%|▌         | 50/1000 [00:01<00:22, 42.84it/s, Loss=0.2219523, Depth Loss=0.0000000]
+Training progress:   6%|▌         | 60/1000 [00:01<00:21, 42.84it/s, Loss=0.1993432, Depth Loss=0.0000000]
+Training progress:   7%|▋         | 70/1000 [00:01<00:16, 57.14it/s, Loss=0.1993432, Depth Loss=0.0000000]
+Training progress:   7%|▋         | 70/1000 [00:01<00:16, 57.14it/s, Loss=0.1901936, Depth Loss=0.0000000]
+Training progress:   8%|▊         | 80/1000 [00:01<00:16, 57.14it/s, Loss=0.1870309, Depth Loss=0.0000000]
+Training progress:   9%|▉         | 90/1000 [00:01<00:13, 68.39it/s, Loss=0.1870309, Depth Loss=0.0000000]
+Training progress:   9%|▉         | 90/1000 [00:02<00:13, 68.39it/s, Loss=0.1971800, Depth Loss=0.0000000]
+Training progress:  10%|█         | 100/1000 [00:02<00:13, 68.39it/s, Loss=0.1993027, Depth Loss=0.0000000]
+Training progress:  11%|█         | 110/1000 [00:02<00:11, 76.81it/s, Loss=0.1993027, Depth Loss=0.0000000]
+Training progress:  11%|█         | 110/1000 [00:02<00:11, 76.81it/s, Loss=0.1983293, Depth Loss=0.0000000]
+Training progress:  12%|█▏        | 120/1000 [00:02<00:10, 80.37it/s, Loss=0.1983293, Depth Loss=0.0000000]
+Training progress:  12%|█▏        | 120/1000 [00:02<00:10, 80.37it/s, Loss=0.1925434, Depth Loss=0.0000000]
+Training progress:  13%|█▎        | 130/1000 [00:02<00:10, 83.42it/s, Loss=0.1925434, Depth Loss=0.0000000]
+Training progress:  13%|█▎        | 130/1000 [00:02<00:10, 83.42it/s, Loss=0.1687473, Depth Loss=0.0000000]
+Training progress:  14%|█▍        | 140/1000 [00:02<00:10, 83.42it/s, Loss=0.1909010, Depth Loss=0.0000000]
+Training progress:  15%|█▌        | 150/1000 [00:02<00:09, 89.11it/s, Loss=0.1909010, Depth Loss=0.0000000]
+Training progress:  15%|█▌        | 150/1000 [00:02<00:09, 89.11it/s, Loss=0.1643350, Depth Loss=0.0000000]
+Training progress:  16%|█▌        | 160/1000 [00:02<00:09, 89.11it/s, Loss=0.1353608, Depth Loss=0.0000000]
+Training progress:  17%|█▋        | 170/1000 [00:02<00:08, 94.91it/s, Loss=0.1353608, Depth Loss=0.0000000]
+Training progress:  17%|█▋        | 170/1000 [00:02<00:08, 94.91it/s, Loss=0.1566559, Depth Loss=0.0000000]
+Training progress:  18%|█▊        | 180/1000 [00:02<00:08, 94.91it/s, Loss=0.1550282, Depth Loss=0.0000000]
+Training progress:  19%|█▉        | 190/1000 [00:02<00:08, 98.31it/s, Loss=0.1550282, Depth Loss=0.0000000]
+Training progress:  19%|█▉        | 190/1000 [00:03<00:08, 98.31it/s, Loss=0.1570903, Depth Loss=0.0000000]
+Training progress:  20%|██        | 200/1000 [00:03<00:08, 98.31it/s, Loss=0.1441850, Depth Loss=0.0000000]
+Training progress:  21%|██        | 210/1000 [00:03<00:07, 100.50it/s, Loss=0.1441850, Depth Loss=0.0000000]
+Training progress:  21%|██        | 210/1000 [00:03<00:07, 100.50it/s, Loss=0.1483458, Depth Loss=0.0000000]
+Training progress:  22%|██▏       | 220/1000 [00:03<00:07, 100.50it/s, Loss=0.1460808, Depth Loss=0.0000000]
+Training progress:  23%|██▎       | 230/1000 [00:03<00:07, 102.38it/s, Loss=0.1460808, Depth Loss=0.0000000]
+Training progress:  23%|██▎       | 230/1000 [00:03<00:07, 102.38it/s, Loss=0.1333116, Depth Loss=0.0000000]
+Training progress:  24%|██▍       | 240/1000 [00:03<00:07, 102.38it/s, Loss=0.1387292, Depth Loss=0.0000000]
+Training progress:  25%|██▌       | 250/1000 [00:03<00:07, 104.36it/s, Loss=0.1387292, Depth Loss=0.0000000]
+Training progress:  25%|██▌       | 250/1000 [00:03<00:07, 104.36it/s, Loss=0.1394086, Depth Loss=0.0000000]
+Training progress:  26%|██▌       | 260/1000 [00:03<00:07, 104.36it/s, Loss=0.1370444, Depth Loss=0.0000000]
+Training progress:  27%|██▋       | 270/1000 [00:03<00:06, 106.29it/s, Loss=0.1370444, Depth Loss=0.0000000]
+Training progress:  27%|██▋       | 270/1000 [00:03<00:06, 106.29it/s, Loss=0.1107302, Depth Loss=0.0000000]
+Training progress:  28%|██▊       | 280/1000 [00:03<00:06, 106.29it/s, Loss=0.1277309, Depth Loss=0.0000000]
+Training progress:  29%|██▉       | 290/1000 [00:03<00:06, 107.86it/s, Loss=0.1277309, Depth Loss=0.0000000]
+Training progress:  29%|██▉       | 290/1000 [00:03<00:06, 107.86it/s, Loss=0.1397971, Depth Loss=0.0000000]
+Training progress:  30%|███       | 300/1000 [00:04<00:06, 107.86it/s, Loss=0.1192842, Depth Loss=0.0000000]
+Training progress:  31%|███       | 310/1000 [00:04<00:06, 108.52it/s, Loss=0.1192842, Depth Loss=0.0000000]
+Training progress:  31%|███       | 310/1000 [00:04<00:06, 108.52it/s, Loss=0.1177670, Depth Loss=0.0000000]
+Training progress:  32%|███▏      | 320/1000 [00:04<00:06, 108.52it/s, Loss=0.0878684, Depth Loss=0.0000000]
+Training progress:  33%|███▎      | 330/1000 [00:04<00:06, 110.34it/s, Loss=0.0878684, Depth Loss=0.0000000]
+Training progress:  33%|███▎      | 330/1000 [00:04<00:06, 110.34it/s, Loss=0.1132092, Depth Loss=0.0000000]
+Training progress:  34%|███▍      | 340/1000 [00:04<00:05, 110.34it/s, Loss=0.1377908, Depth Loss=0.0000000]
+Training progress:  35%|███▌      | 350/1000 [00:04<00:05, 110.82it/s, Loss=0.1377908, Depth Loss=0.0000000]
+Training progress:  35%|███▌      | 350/1000 [00:04<00:05, 110.82it/s, Loss=0.0837014, Depth Loss=0.0000000]
+Training progress:  36%|███▌      | 360/1000 [00:04<00:05, 110.82it/s, Loss=0.1008634, Depth Loss=0.0000000]
+Training progress:  37%|███▋      | 370/1000 [00:04<00:05, 112.50it/s, Loss=0.1008634, Depth Loss=0.0000000]
+Training progress:  37%|███▋      | 370/1000 [00:04<00:05, 112.50it/s, Loss=0.1271460, Depth Loss=0.0000000]
+Training progress:  38%|███▊      | 380/1000 [00:04<00:05, 112.50it/s, Loss=0.0901565, Depth Loss=0.0000000]
+Training progress:  39%|███▉      | 390/1000 [00:04<00:05, 112.90it/s, Loss=0.0901565, Depth Loss=0.0000000]
+Training progress:  39%|███▉      | 390/1000 [00:04<00:05, 112.90it/s, Loss=0.1180287, Depth Loss=0.0000000]
+Training progress:  40%|████      | 400/1000 [00:04<00:05, 112.90it/s, Loss=0.1047606, Depth Loss=0.0000000]
+Training progress:  41%|████      | 410/1000 [00:04<00:05, 113.20it/s, Loss=0.1047606, Depth Loss=0.0000000]
+Training progress:  41%|████      | 410/1000 [00:04<00:05, 113.20it/s, Loss=0.0942856, Depth Loss=0.0000000]
+Training progress:  42%|████▏     | 420/1000 [00:05<00:05, 113.20it/s, Loss=0.0860427, Depth Loss=0.0000000]
+Training progress:  43%|████▎     | 430/1000 [00:05<00:04, 114.48it/s, Loss=0.0860427, Depth Loss=0.0000000]
+Training progress:  43%|████▎     | 430/1000 [00:05<00:04, 114.48it/s, Loss=0.0737269, Depth Loss=0.0000000]
+Training progress:  44%|████▍     | 440/1000 [00:05<00:04, 114.48it/s, Loss=0.0770534, Depth Loss=0.0000000]
+Training progress:  45%|████▌     | 450/1000 [00:05<00:04, 115.92it/s, Loss=0.0770534, Depth Loss=0.0000000]
+Training progress:  45%|████▌     | 450/1000 [00:05<00:04, 115.92it/s, Loss=0.1261931, Depth Loss=0.0000000]
+Training progress:  46%|████▌     | 460/1000 [00:05<00:04, 115.92it/s, Loss=0.1099874, Depth Loss=0.0000000]
+Training progress:  47%|████▋     | 470/1000 [00:05<00:04, 115.39it/s, Loss=0.1099874, Depth Loss=0.0000000]
+Training progress:  47%|████▋     | 470/1000 [00:05<00:04, 115.39it/s, Loss=0.0822279, Depth Loss=0.0000000]
+Training progress:  48%|████▊     | 480/1000 [00:05<00:04, 115.39it/s, Loss=0.0751187, Depth Loss=0.0000000]
+Training progress:  49%|████▉     | 490/1000 [00:05<00:04, 115.90it/s, Loss=0.0751187, Depth Loss=0.0000000]
+Training progress:  49%|████▉     | 490/1000 [00:05<00:04, 115.90it/s, Loss=0.0928196, Depth Loss=0.0000000]
+Training progress:  50%|█████     | 500/1000 [00:05<00:04, 115.90it/s, Loss=0.0735781, Depth Loss=0.0000000]
+Training progress:  51%|█████     | 510/1000 [00:05<00:04, 115.62it/s, Loss=0.0735781, Depth Loss=0.0000000]
+Training progress:  51%|█████     | 510/1000 [00:05<00:04, 115.62it/s, Loss=0.0944880, Depth Loss=0.0000000]
+Training progress:  52%|█████▏    | 520/1000 [00:05<00:04, 115.62it/s, Loss=0.0865215, Depth Loss=0.0000000]
+Training progress:  53%|█████▎    | 530/1000 [00:05<00:04, 115.51it/s, Loss=0.0865215, Depth Loss=0.0000000]
+Training progress:  53%|█████▎    | 530/1000 [00:06<00:04, 115.51it/s, Loss=0.0717827, Depth Loss=0.0000000]
+Training progress:  54%|█████▍    | 540/1000 [00:06<00:03, 115.51it/s, Loss=0.0690710, Depth Loss=0.0000000]
+Training progress:  55%|█████▌    | 550/1000 [00:06<00:03, 117.30it/s, Loss=0.0690710, Depth Loss=0.0000000]
+Training progress:  55%|█████▌    | 550/1000 [00:06<00:03, 117.30it/s, Loss=0.0729894, Depth Loss=0.0000000]
+Training progress:  56%|█████▌    | 560/1000 [00:06<00:03, 117.30it/s, Loss=0.0997626, Depth Loss=0.0000000]
+Training progress:  57%|█████▋    | 570/1000 [00:06<00:03, 118.01it/s, Loss=0.0997626, Depth Loss=0.0000000]
+Training progress:  57%|█████▋    | 570/1000 [00:06<00:03, 118.01it/s, Loss=0.1058437, Depth Loss=0.0000000]
+Training progress:  58%|█████▊    | 580/1000 [00:06<00:03, 118.01it/s, Loss=0.0824983, Depth Loss=0.0000000]
+Training progress:  59%|█████▉    | 590/1000 [00:06<00:03, 118.24it/s, Loss=0.0824983, Depth Loss=0.0000000]
+Training progress:  59%|█████▉    | 590/1000 [00:06<00:03, 118.24it/s, Loss=0.0985551, Depth Loss=0.0000000]
+Training progress:  60%|██████    | 600/1000 [00:06<00:03, 118.24it/s, Loss=0.1155879, Depth Loss=0.0000000]
+Training progress:  61%|██████    | 610/1000 [00:06<00:04, 80.98it/s, Loss=0.1155879, Depth Loss=0.0000000] 
+Training progress:  61%|██████    | 610/1000 [00:06<00:04, 80.98it/s, Loss=0.0867007, Depth Loss=0.0000000]
+Training progress:  62%|██████▏   | 620/1000 [00:07<00:04, 80.98it/s, Loss=0.1005129, Depth Loss=0.0000000]
+Training progress:  63%|██████▎   | 630/1000 [00:07<00:04, 90.26it/s, Loss=0.1005129, Depth Loss=0.0000000]
+Training progress:  63%|██████▎   | 630/1000 [00:07<00:04, 90.26it/s, Loss=0.0850084, Depth Loss=0.0000000]
+Training progress:  64%|██████▍   | 640/1000 [00:07<00:03, 90.26it/s, Loss=0.1043093, Depth Loss=0.0000000]
+Training progress:  65%|██████▌   | 650/1000 [00:07<00:03, 98.44it/s, Loss=0.1043093, Depth Loss=0.0000000]
+Training progress:  65%|██████▌   | 650/1000 [00:07<00:03, 98.44it/s, Loss=0.0847335, Depth Loss=0.0000000]
+Training progress:  66%|██████▌   | 660/1000 [00:07<00:03, 98.44it/s, Loss=0.0794687, Depth Loss=0.0000000]
+Training progress:  67%|██████▋   | 670/1000 [00:07<00:03, 105.50it/s, Loss=0.0794687, Depth Loss=0.0000000]
+Training progress:  67%|██████▋   | 670/1000 [00:07<00:03, 105.50it/s, Loss=0.0710254, Depth Loss=0.0000000]
+Training progress:  68%|██████▊   | 680/1000 [00:07<00:03, 105.50it/s, Loss=0.0674824, Depth Loss=0.0000000]
+Training progress:  69%|██████▉   | 690/1000 [00:07<00:02, 110.31it/s, Loss=0.0674824, Depth Loss=0.0000000]
+Training progress:  69%|██████▉   | 690/1000 [00:07<00:02, 110.31it/s, Loss=0.0613273, Depth Loss=0.0000000]
+Training progress:  70%|███████   | 700/1000 [00:07<00:02, 110.31it/s, Loss=0.1168663, Depth Loss=0.0000000]
+Training progress:  71%|███████   | 710/1000 [00:07<00:02, 114.97it/s, Loss=0.1168663, Depth Loss=0.0000000]
+Training progress:  71%|███████   | 710/1000 [00:07<00:02, 114.97it/s, Loss=0.0895283, Depth Loss=0.0000000]
+Training progress:  72%|███████▏  | 720/1000 [00:07<00:02, 114.97it/s, Loss=0.0857410, Depth Loss=0.0000000]
+Training progress:  73%|███████▎  | 730/1000 [00:07<00:02, 120.61it/s, Loss=0.0857410, Depth Loss=0.0000000]
+Training progress:  73%|███████▎  | 730/1000 [00:07<00:02, 120.61it/s, Loss=0.1129245, Depth Loss=0.0000000]
+Training progress:  74%|███████▍  | 740/1000 [00:07<00:02, 120.61it/s, Loss=0.0747303, Depth Loss=0.0000000]
+Training progress:  75%|███████▌  | 750/1000 [00:07<00:02, 124.38it/s, Loss=0.0747303, Depth Loss=0.0000000]
+Training progress:  75%|███████▌  | 750/1000 [00:08<00:02, 124.38it/s, Loss=0.0921212, Depth Loss=0.0000000]
+Training progress:  76%|███████▌  | 760/1000 [00:08<00:01, 124.38it/s, Loss=0.0962780, Depth Loss=0.0000000]
+Training progress:  77%|███████▋  | 770/1000 [00:08<00:01, 126.61it/s, Loss=0.0962780, Depth Loss=0.0000000]
+Training progress:  77%|███████▋  | 770/1000 [00:08<00:01, 126.61it/s, Loss=0.0547152, Depth Loss=0.0000000]
+Training progress:  78%|███████▊  | 780/1000 [00:08<00:01, 126.61it/s, Loss=0.0632054, Depth Loss=0.0000000]
+Training progress:  79%|███████▉  | 790/1000 [00:08<00:01, 127.38it/s, Loss=0.0632054, Depth Loss=0.0000000]
+Training progress:  79%|███████▉  | 790/1000 [00:08<00:01, 127.38it/s, Loss=0.0571063, Depth Loss=0.0000000]
+Training progress:  80%|████████  | 800/1000 [00:08<00:01, 127.38it/s, Loss=0.1216734, Depth Loss=0.0000000]
+Training progress:  81%|████████  | 810/1000 [00:08<00:01, 127.97it/s, Loss=0.1216734, Depth Loss=0.0000000]
+Training progress:  81%|████████  | 810/1000 [00:08<00:01, 127.97it/s, Loss=0.1070657, Depth Loss=0.0000000]
+Training progress:  82%|████████▏ | 820/1000 [00:08<00:01, 127.97it/s, Loss=0.0727181, Depth Loss=0.0000000]
+Training progress:  83%|████████▎ | 830/1000 [00:08<00:01, 131.38it/s, Loss=0.0727181, Depth Loss=0.0000000]
+Training progress:  83%|████████▎ | 830/1000 [00:08<00:01, 131.38it/s, Loss=0.0885473, Depth Loss=0.0000000]
+Training progress:  84%|████████▍ | 840/1000 [00:08<00:01, 131.38it/s, Loss=0.0940759, Depth Loss=0.0000000]
+Training progress:  85%|████████▌ | 850/1000 [00:08<00:01, 133.30it/s, Loss=0.0940759, Depth Loss=0.0000000]
+Training progress:  85%|████████▌ | 850/1000 [00:08<00:01, 133.30it/s, Loss=0.0714356, Depth Loss=0.0000000]
+Training progress:  86%|████████▌ | 860/1000 [00:08<00:01, 133.30it/s, Loss=0.0843751, Depth Loss=0.0000000]
+Training progress:  87%|████████▋ | 870/1000 [00:08<00:00, 135.66it/s, Loss=0.0843751, Depth Loss=0.0000000]
+Training progress:  87%|████████▋ | 870/1000 [00:08<00:00, 135.66it/s, Loss=0.0763417, Depth Loss=0.0000000]
+Training progress:  88%|████████▊ | 880/1000 [00:09<00:00, 135.66it/s, Loss=0.0554845, Depth Loss=0.0000000]
+Training progress:  89%|████████▉ | 890/1000 [00:09<00:00, 136.38it/s, Loss=0.0554845, Depth Loss=0.0000000]
+Training progress:  89%|████████▉ | 890/1000 [00:09<00:00, 136.38it/s, Loss=0.0775191, Depth Loss=0.0000000]
+Training progress:  90%|█████████ | 900/1000 [00:09<00:00, 136.38it/s, Loss=0.0792526, Depth Loss=0.0000000]
+Training progress:  91%|█████████ | 910/1000 [00:09<00:00, 135.66it/s, Loss=0.0792526, Depth Loss=0.0000000]
+Training progress:  91%|█████████ | 910/1000 [00:09<00:00, 135.66it/s, Loss=0.0797058, Depth Loss=0.0000000]
+Training progress:  92%|█████████▏| 920/1000 [00:09<00:00, 135.66it/s, Loss=0.0764741, Depth Loss=0.0000000]
+Training progress:  93%|█████████▎| 930/1000 [00:09<00:00, 136.68it/s, Loss=0.0764741, Depth Loss=0.0000000]
+Training progress:  93%|█████████▎| 930/1000 [00:09<00:00, 136.68it/s, Loss=0.0659743, Depth Loss=0.0000000]
+Training progress:  94%|█████████▍| 940/1000 [00:09<00:00, 136.68it/s, Loss=0.0565766, Depth Loss=0.0000000]
+Training progress:  95%|█████████▌| 950/1000 [00:09<00:00, 138.67it/s, Loss=0.0565766, Depth Loss=0.0000000]
+Training progress:  95%|█████████▌| 950/1000 [00:09<00:00, 138.67it/s, Loss=0.0646496, Depth Loss=0.0000000]
+Training progress:  96%|█████████▌| 960/1000 [00:09<00:00, 138.67it/s, Loss=0.0573390, Depth Loss=0.0000000]
+Training progress:  97%|█████████▋| 970/1000 [00:09<00:00, 139.54it/s, Loss=0.0573390, Depth Loss=0.0000000]
+Training progress:  97%|█████████▋| 970/1000 [00:09<00:00, 139.54it/s, Loss=0.0545588, Depth Loss=0.0000000]
+Training progress:  98%|█████████▊| 980/1000 [00:09<00:00, 139.54it/s, Loss=0.0436263, Depth Loss=0.0000000]
+Training progress:  99%|█████████▉| 990/1000 [00:09<00:00, 139.92it/s, Loss=0.0436263, Depth Loss=0.0000000]
+Training progress:  99%|█████████▉| 990/1000 [00:09<00:00, 139.92it/s, Loss=0.0482047, Depth Loss=0.0000000]
+Training progress: 100%|██████████| 1000/1000 [00:09<00:00, 102.14it/s, Loss=0.0482047, Depth Loss=0.0000000]
+
+Optimizing ../../outputs/task1/object_A_3dgs
+Output folder: ../../outputs/task1/object_A_3dgs [22/06 10:14:03]
+Tensorboard not available: not logging progress [22/06 10:14:03]
+------------LLFF HOLD------------- [22/06 10:14:03]
+
+Reading camera 1/63
+Reading camera 2/63
+Reading camera 3/63
+Reading camera 4/63
+Reading camera 5/63
+Reading camera 6/63
+Reading camera 7/63
+Reading camera 8/63
+Reading camera 9/63
+Reading camera 10/63
+Reading camera 11/63
+Reading camera 12/63
+Reading camera 13/63
+Reading camera 14/63
+Reading camera 15/63
+Reading camera 16/63
+Reading camera 17/63
+Reading camera 18/63
+Reading camera 19/63
+Reading camera 20/63
+Reading camera 21/63
+Reading camera 22/63
+Reading camera 23/63
+Reading camera 24/63
+Reading camera 25/63
+Reading camera 26/63
+Reading camera 27/63
+Reading camera 28/63
+Reading camera 29/63
+Reading camera 30/63
+Reading camera 31/63
+Reading camera 32/63
+Reading camera 33/63
+Reading camera 34/63
+Reading camera 35/63
+Reading camera 36/63
+Reading camera 37/63
+Reading camera 38/63
+Reading camera 39/63
+Reading camera 40/63
+Reading camera 41/63
+Reading camera 42/63
+Reading camera 43/63
+Reading camera 44/63
+Reading camera 45/63
+Reading camera 46/63
+Reading camera 47/63
+Reading camera 48/63
+Reading camera 49/63
+Reading camera 50/63
+Reading camera 51/63
+Reading camera 52/63
+Reading camera 53/63
+Reading camera 54/63
+Reading camera 55/63
+Reading camera 56/63
+Reading camera 57/63
+Reading camera 58/63
+Reading camera 59/63
+Reading camera 60/63
+Reading camera 61/63
+Reading camera 62/63
+Reading camera 63/63 [22/06 10:14:03]
+Converting point3d.bin to .ply, will happen only the first time you open the scene. [22/06 10:14:03]
+Loading Training Cameras [22/06 10:14:03]
+Loading Test Cameras [22/06 10:14:05]
+Number of points at initialisation :  3289 [22/06 10:14:05]
+
+[ITER 1000] Evaluating test: L1 0.04179087351076305 PSNR 23.977986097335815 [22/06 10:14:16]
+
+[ITER 1000] Evaluating train: L1 0.04345531463623047 PSNR 23.9787166595459 [22/06 10:14:16]
+
+[ITER 1000] Saving Gaussians [22/06 10:14:16]
+
+Training complete. [22/06 10:14:16]
+
+	Command being timed: "bash -lc cd third_party/gaussian-splatting && CUDA_VISIBLE_DEVICES=1 PYTHONPATH="/home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project/local_pkgs/3dgs" /home/zhangzhiwei/miniconda3/bin/conda run -n base python train.py -s ../../data/object_A_video -m ../../outputs/task1/object_A_3dgs --eval -r 2 --iterations 1000 --save_iterations 1000 --test_iterations 1000 --disable_viewer"
+	User time (seconds): 65.49
+	System time (seconds): 7.67
+	Percent of CPU this job got: 383%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:19.09
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1709416
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 577
+	Minor (reclaiming a frame) page faults: 672920
+	Voluntary context switches: 10007
+	Involuntary context switches: 5198220
+	Swaps: 0
+	File system inputs: 187000
+	File system outputs: 9792
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+## nvidia-smi after
+Mon Jun 22 10:14:17 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 35%   63C    P2            128W /  300W |    4908MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   41C    P0             85W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   31C    P8             11W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A   1088867      C   python                                       4902MiB |
++-----------------------------------------------------------------------------------------+
+
+status: 0
+end: 2026-06-22T10:14:17+00:00
+duration_sec: 19

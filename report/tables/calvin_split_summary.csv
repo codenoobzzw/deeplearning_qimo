@@ -1,2 +1,4 @@
 split,episodes,frames,action_dim,state_dim,camera_keys,task_count,env_distribution,status
-A/B/C/D,NA,NA,NA,NA,NA,NA,NA,blocked_hf_probe_failed
+train_A,NA,NA,NA,NA,NA,NA,splitA,remote_layout_only
+train_ABC,NA,NA,NA,NA,NA,NA,splitA+splitB+splitC,remote_layout_only
+test_D,NA,NA,NA,NA,NA,NA,splitD,remote_layout_only

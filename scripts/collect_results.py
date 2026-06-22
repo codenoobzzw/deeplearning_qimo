@@ -36,19 +36,93 @@ def file_size(rel: str) -> str:
     return str(path.stat().st_size)
 
 
+def read_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def ply_vertex_count(path: Path) -> str:
+    if not path.exists():
+        return "NA"
+    with path.open("rb") as f:
+        for raw in f:
+            line = raw.decode("ascii", errors="ignore").strip()
+            if line.startswith("element vertex "):
+                return line.split()[-1]
+            if line == "end_header":
+                break
+    return "NA"
+
+
+def parse_colmap_stats(path: Path) -> dict[str, str]:
+    stats: dict[str, str] = {}
+    if not path.exists():
+        return stats
+    for line in path.read_text(encoding="utf-8", errors="ignore").splitlines():
+        if ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        stats[key.strip()] = value.strip()
+    return stats
+
+
+def object_a_metrics() -> str:
+    metrics = read_json(ROOT / "outputs/task1/object_A_3dgs/results.json")
+    if not metrics:
+        return "NA"
+    values = metrics.get("ours_1000")
+    if not isinstance(values, dict):
+        values = next((v for v in metrics.values() if isinstance(v, dict)), {})
+    if not values:
+        return "NA"
+    parts = []
+    for key in ["PSNR", "SSIM", "LPIPS"]:
+        value = values.get(key)
+        if isinstance(value, (int, float)):
+            parts.append(f"{key} {value:.4f}")
+    return "; ".join(parts) if parts else "NA"
+
+
 def write_task1_assets() -> None:
-    stats_path = ROOT / "outputs/task1/object_A_frame_stats_all.json"
-    object_a_images = count_images(ROOT / "data/object_A_all/input")
-    if not stats_path.exists():
-        stats_path = ROOT / "outputs/task1/object_A_frame_stats.json"
-        object_a_images = count_images(ROOT / "data/object_A/input")
-    if stats_path.exists():
-        try:
-            object_a_images = json.loads(stats_path.read_text(encoding="utf-8")).get("selected_count", object_a_images)
-        except Exception:
-            pass
-    rows = [
-        {
+    video_stats = read_json(ROOT / "outputs/task1/object_A_video_frame_stats.json")
+    colmap_stats = parse_colmap_stats(ROOT / "outputs/task1/object_A_video_colmap_stats.txt")
+    object_a_pc = ROOT / "outputs/task1/object_A_3dgs/point_cloud/iteration_1000/point_cloud.ply"
+    object_a_success = object_a_pc.exists()
+    if video_stats:
+        selected = video_stats.get("selected_count", count_images(ROOT / "data/object_A_video/input"))
+        registered = colmap_stats.get("Registered images")
+        object_a_images = f"{selected} selected video frames"
+        if registered:
+            object_a_images += f"; {registered} registered"
+    else:
+        stats_path = ROOT / "outputs/task1/object_A_frame_stats_all.json"
+        object_a_images = count_images(ROOT / "data/object_A_all/input")
+        if not stats_path.exists():
+            stats_path = ROOT / "outputs/task1/object_A_frame_stats.json"
+            object_a_images = count_images(ROOT / "data/object_A/input")
+        if stats_path.exists():
+            object_a_images = read_json(stats_path).get("selected_count", object_a_images)
+
+    if object_a_success:
+        object_a_row = {
+            "Asset": "A",
+            "Input source": "student A_video.mp4; original 6 photos kept as failed baseline",
+            "Method": "COLMAP + 3DGS",
+            "Output representation": latest_point_cloud(ROOT / "outputs/task1/object_A_3dgs"),
+            "Training steps or iterations": "COLMAP SfM + 3DGS 1000 sanity iterations",
+            "Number of input images": object_a_images,
+            "Number of Gaussians or mesh vertices/faces": ply_vertex_count(object_a_pc),
+            "Training time": "extract 1s; COLMAP/convert 269s; train 19s; render 15s; metrics 78s",
+            "Peak GPU memory": "not sampled continuously; completed on RTX A6000",
+            "Main quality observations": "Video fixed COLMAP init; 1000-iter render is coherent but still slightly blurry.",
+            "Metrics": object_a_metrics(),
+        }
+    else:
+        object_a_row = {
             "Asset": "A",
             "Input source": "multi-view photos uploaded by student",
             "Method": "COLMAP + 3DGS",
@@ -60,7 +134,10 @@ def write_task1_assets() -> None:
             "Peak GPU memory": "3DGS training not started",
             "Main quality observations": "COLMAP repeatedly reported no good initial image pair; likely too few or insufficient-baseline laptop views.",
             "Metrics": "NA",
-        },
+        }
+
+    rows = [
+        object_a_row,
         {
             "Asset": "B",
             "Input source": "text prompt",
