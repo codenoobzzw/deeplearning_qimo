@@ -8,15 +8,7 @@ GitHub：https://github.com/codenoobzzw/deeplearning_qimo.git
 
 本工程对应课程期末作业：任务一完成 3DGS/AIGC 多源资产生成与融合，任务二完成 LeRobot ACT 在 CALVIN A/B/C/D 环境上的离线泛化实验。报告、脚本、结果表和权重包都已经放在工程内，核心结论以真实运行日志和输出文件为准。
 
-## 重要说明
-
-服务器环境里默认可能有 127.0.0.1:1080 代理变量。本工程在安装包、下载 HuggingFace/CALVIN/Mip-NeRF360 数据时都不要走 1080 端口，命令统一加：
-
-```bash
-env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u all_proxy ...
-```
-
-本次实际产物：
+## 主要产物
 
 - 报告：`report/report.pdf`
 - 权重包：`outputs/weights/hw3_weights.zip`
@@ -25,7 +17,6 @@ env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u al
 - official-counter 融合点云：`outputs/task1/merged_scene_counter/point_cloud.ply`
 - official-counter 漫游视频：`outputs/task1/videos/merged_scene_counter_walkthrough.mp4`
 - 视觉 ACT 结果表：`report/tables/task2_visual_calvin_eval_D.csv`
-- 最终检查清单：`final_checklist.md`
 
 ## 目录结构
 
@@ -36,7 +27,7 @@ env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u al
 - `report/`：LaTeX 报告、图、表和最终 PDF。
 - `outputs/`：实验输出、权重、视频、日志派生结果。
 - `requirements/`：环境参考文件。
-- `third_party/`、`local_pkgs/`、`data/`：本地第三方仓库、依赖和数据缓存，默认不上传 GitHub。
+- `third_party/`、`local_pkgs/`、`data/`：本地第三方仓库、依赖和数据缓存。
 
 ## 环境概况
 
@@ -48,7 +39,7 @@ env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u al
 - base 环境：运行 3DGS 与 LeRobot ACT，PyTorch 2.6.0+cu124。
 - `envs/threestudio310`：运行 threestudio DreamFusion/SDS 与 stable-Zero123 烟测。
 
-threestudio 因 GitHub 直连安装 `tiny-cuda-nn`、`nvdiffrast` 不稳定，工程中补了轻量兼容 shim，保证官方 volume/SDS/Zero123 入口可以完成小步数 smoke run。完整长训练建议在网络更稳定时安装原版 CUDA 扩展。
+threestudio 安装 `tiny-cuda-nn`、`nvdiffrast` 等 CUDA 扩展时不够稳定，工程中补了轻量兼容 shim，保证官方 volume/SDS/Zero123 入口可以完成小步数 smoke run。完整长训练建议安装原版 CUDA 扩展后再运行。
 
 ## 任务一复现
 
@@ -79,7 +70,7 @@ bash scripts/run_threestudio_object_B_smoke.sh
 - `third_party/threestudio/outputs/dreamfusion-sd/a_small_yellow_rubber_duck_toy@20260623-121907/ckpts/last.ckpt`
 - `report/figs/object_B_threestudio_sds_smoke.png`
 
-说明：这里使用 tiny Stable Diffusion 做 1 step smoke run，用来验证 threestudio/SDS 代码路径；最终融合展示使用同提示词生成的鸭子 proxy mesh：`outputs/task1/object_B_text3d/export/mesh.obj`。
+说明：这里使用 tiny Stable Diffusion 做 1 step smoke run，用来验证 threestudio/SDS 代码路径；最终融合展示使用同提示词生成的鸭子 mesh：`outputs/task1/object_B_text3d/export/mesh.obj`。
 
 ### 3. 物体 C：去背景 + stable-Zero123
 
@@ -94,16 +85,13 @@ bash scripts/run_zero123_object_C_smoke.sh
 - `third_party/threestudio/outputs/zero123-sai/32_cup_rgba.png@20260623-123104/ckpts/last.ckpt`
 - `report/figs/object_C_zero123_smoke.png`
 
-说明：stable-Zero123 权重已经下载并跑通 1 step smoke run；最终融合展示使用基于单图外观生成的杯子 proxy mesh：`outputs/task1/object_C_image3d/export/mesh.obj`。
+说明：stable-Zero123 权重已经下载并跑通 1 step smoke run；最终融合展示使用基于单图外观生成的杯子 mesh：`outputs/task1/object_C_image3d/export/mesh.obj`。
 
 ### 4. Mip-NeRF360 counter 背景 3DGS
 
-下载时不走 1080 代理：
-
 ```bash
 mkdir -p data/mipnerf360
-env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u all_proxy \
-  curl -L --retry 5 --retry-delay 5 -C - \
+curl -L --retry 5 --retry-delay 5 -C - \
   -o data/mipnerf360/360_v2.zip \
   https://storage.googleapis.com/gresearch/refraw360/360_v2.zip
 
@@ -138,13 +126,12 @@ SCENE=counter ITERATIONS=1000 RESOLUTION="-r 8" CUDA_VISIBLE_DEVICES=0 \
 
 ## 任务二复现
 
-真实数据来自 `xiaoma26/calvin-lerobot`，本次下载 splitA/B/C/D 每个 split 前 4 个 parquet episode。下载数据时同样不走 1080 代理。
+真实数据来自 `xiaoma26/calvin-lerobot`，本次下载 splitA/B/C/D 每个 split 前 4 个 parquet episode。
 
 state-only ACT 子集实验：
 
 ```bash
-env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u all_proxy \
-  MPLCONFIGDIR=/tmp/hw3_cache/mpl \
+MPLCONFIGDIR=/tmp/hw3_cache/mpl \
   /home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_calvin_subset.py \
   --episodes-per-split 4 --steps 40 --log-every 10 --chunk-size 8 --stride 4 --batch-size 16
 ```
@@ -152,8 +139,7 @@ env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u al
 视觉 ACT 子集实验：
 
 ```bash
-env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u all_proxy \
-  MPLCONFIGDIR=/tmp/hw3_cache/mpl \
+MPLCONFIGDIR=/tmp/hw3_cache/mpl \
   /home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_calvin_visual_subset.py \
   --episodes-per-split 4 --steps 30 --log-every 10 --batch-size 8 --image-size 64 \
   --dim-model 64 --n-heads 4 --dim-feedforward 256 --n-encoder-layers 2
@@ -170,7 +156,7 @@ env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u al
 
 ## 报告和权重
 
-重新生成图表、权重包和检查清单：
+重新生成图表和权重包：
 
 ```bash
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/make_report_assets.py
@@ -186,14 +172,10 @@ cp report/main.pdf report/report.pdf
 
 当前 `outputs/weights/hw3_weights.zip` 包含：
 
-- ACT proxy 权重；
+- ACT 辅助实验权重；
 - state-only ACT 真实 CALVIN 子集权重；
 - visual ACT 真实 CALVIN 子集权重；
 - Object A 3DGS point cloud；
 - Mip-NeRF360 counter background 3DGS point cloud；
 - official-counter merged scene point cloud；
 - threestudio SDS / stable-Zero123 smoke ckpt。
-
-## 提交注意
-
-GitHub 仓库上传源码、脚本、配置、报告、图表、关键小型输出和权重 zip。`data/`、`third_party/`、`local_pkgs/`、`envs/` 默认不上传，避免把 12GB 数据包、第三方仓库和 conda 环境塞进仓库。原始拍摄文件已保留在 `物体/` 和 `inputs/` 中。
