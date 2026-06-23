@@ -1,10 +1,11 @@
 # 深度学习与空间智能期末作业工程
 
-本项目对应“基于 3DGS/AIGC 的多源资产融合与 ACT 跨环境泛化实验”。工程已按可复现方式组织脚本、输入、日志、表格和报告；所有已写入报告的状态都来自真实运行日志或真实输出，没有补造训练指标。当前版本包含两条线：一条是 3DGS/threestudio/Zero123/LeRobot 的官方入口；另一条是在外部模型权重、CALVIN 元数据和 Mip-NeRF360 大数据不可用时跑通的代理闭环，用于产出 A/B/C/背景融合视频、ACT action chunking 曲线和模型权重。
+本项目对应“基于 3DGS/AIGC 的多源资产融合与 ACT 跨环境泛化实验”。工程已按可复现方式组织脚本、输入、日志、表格和报告；所有已写入报告的状态都来自真实运行日志或真实输出，没有补造训练指标。当前版本包含两条线：一条是 3DGS/threestudio/Zero123/LeRobot 的官方入口；另一条是在外部模型权重、CALVIN 元数据和 Mip-NeRF360 大数据不可用时跑通的替代闭环，用于产出 A/B/C/背景融合视频、ACT action chunking 曲线和模型权重。
 
 ## 目录结构
 
 - `inputs/`: 学生上传的物体 A 多视角照片/视频、物体 C 杯子照片。
+- `物体/`: 原始拍摄文件备份，与 `inputs/` 中规范化后的输入文件一一对应。
 - `data/`: 预处理后的 COLMAP/3DGS/CALVIN 数据目录。
 - `third_party/`: 官方 `gaussian-splatting`、`threestudio`、`lerobot`、`calvin` 仓库。
 - `scripts/`: 数据准备、训练入口、Gaussian/Mesh 转换、结果收集脚本。
@@ -48,7 +49,7 @@ inputs/object_C/cup.jpg
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/preprocess_object_c.py
 ```
 
-物体 C 的去背景结果是启发式 RGBA，不是 rembg/SAM 级别的精细 matting，输出见 `outputs/task1/figures/object_C_bg_removal.png`。
+物体 C 的去背景结果是启发式 RGBA，不是 rembg/SAM 级别的精细 matting，输出见 `outputs/task1/figures/object_C_bg_removal.png`。原始拍摄文件同时保留在 `物体/` 目录中，便于老师核对原始输入。
 
 ## 第三方仓库与依赖
 
@@ -187,14 +188,13 @@ cp report/main.pdf report/report.pdf
 
 ## GitHub 与权重
 
-当前未创建远程 GitHub 仓库。可在确认报告和个人信息后运行：
+GitHub 仓库：
 
-```bash
-git init
-git add README.md run_manifest.md requirements configs scripts report final_checklist.md
-git commit -m "Add spatial intelligence final project"
-git remote add origin <your-public-repo-url>
-git push -u origin main
+```text
+https://github.com/codenoobzzw/deeplearning_qimo.git
+git@github.com:codenoobzzw/deeplearning_qimo.git
 ```
 
-不要把大数据集或本地 conda 依赖目录上传到 GitHub。`outputs/weights/hw3_weights.zip` 当前包含 `act_A_proxy.pt` 与 `act_ABC_proxy.pt`，用于复现报告中的代理 ACT 曲线；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。
+本工程已包含源码、脚本、输入文件、日志、报告图表、关键输出和提交检查清单。`third_party/`、`local_pkgs/` 和 `data/` 默认不上传到 GitHub，避免把第三方仓库、本地依赖和中间数据缓存一起塞进仓库。
+
+`outputs/weights/hw3_weights.zip` 当前包含 `act_A_proxy.pt` 与 `act_ABC_proxy.pt`，用于复现报告中的 ACT 替代实验曲线；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。百度网盘上传完成后，可把分享链接补回报告首页的“模型权重网盘链接”处。
