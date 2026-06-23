@@ -1,0 +1,3 @@
+model,metric_type,mean_action_l1,median_action_l1,success_rate_l1_lt_0.05,success_rate_l1_lt_0.10,status,note
+ACT-A-visual-real-subset,real_visual_calvin_subset_zero_shot_D,0.278258,0.263635,0.000000,0.000000,real_visual_subset_run,"Real xiaoma26/calvin-lerobot image+wrist_image+state inputs; offline Action L1, not simulator rollout success."
+ACT-ABC-visual-real-subset,real_visual_calvin_subset_zero_shot_D,0.286543,0.235508,0.000000,0.073529,real_visual_subset_run,"Real xiaoma26/calvin-lerobot image+wrist_image+state inputs; offline Action L1, not simulator rollout success."

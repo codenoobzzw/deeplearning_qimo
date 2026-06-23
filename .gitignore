@@ -1,11 +1,11 @@
 third_party/
 local_pkgs/
 data/
-outputs/
-!outputs/
+outputs/*
+envs/
 !outputs/weights/
+outputs/weights/*
 !outputs/weights/NO_TRAINED_WEIGHTS.txt
-!outputs/weights/hw3_weights.zip
 
 __pycache__/
 *.pyc

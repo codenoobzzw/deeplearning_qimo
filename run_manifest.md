@@ -4,6 +4,37 @@ All key commands should be run through `scripts/run_and_log.sh` when possible.
 This file records commands that were executed for this project and whether they
 completed. Results in the report must be traceable to logs or generated files.
 
+## 2026-06-23 latest completion summary
+
+- Object B official SDS smoke completed through threestudio DreamFusion/SDS:
+  - command wrapper: `scripts/run_threestudio_object_B_smoke.sh`
+  - output ckpt: `third_party/threestudio/outputs/dreamfusion-sd/a_small_yellow_rubber_duck_toy@20260623-121907/ckpts/last.ckpt`
+  - report image: `report/figs/object_B_threestudio_sds_smoke.png`
+- Object C official stable-Zero123 smoke completed:
+  - command wrapper: `scripts/run_zero123_object_C_smoke.sh`
+  - output ckpt: `third_party/threestudio/outputs/zero123-sai/32_cup_rgba.png@20260623-123104/ckpts/last.ckpt`
+  - report image: `report/figs/object_C_zero123_smoke.png`
+- Mip-NeRF360 `counter` downloaded without the 1080 proxy and trained with official gaussian-splatting:
+  - data zip: `data/mipnerf360/360_v2.zip`
+  - scene: `data/mipnerf360/counter`
+  - train log: `logs/background_counter_3dgs_train_20260623_124712.log`
+  - render log: `logs/background_counter_3dgs_render_20260623_124812.log`
+  - metrics log: `logs/background_counter_3dgs_metrics_20260623_124859.log`
+  - result: PSNR 24.5242, SSIM 0.8315, LPIPS 0.1954
+- Official-counter merged scene completed:
+  - config: `configs/placements_official_counter.yaml`
+  - merged PLY: `outputs/task1/merged_scene_counter/point_cloud.ply`
+  - video: `outputs/task1/videos/merged_scene_counter_walkthrough.mp4`
+- Real visual CALVIN-LeRobot ACT subset completed:
+  - script: `scripts/train_act_calvin_visual_subset.py`
+  - summary: `outputs/task2/real_calvin_visual_subset_summary.json`
+  - D eval table: `report/tables/task2_visual_calvin_eval_D.csv`
+  - weights: `outputs/weights/ACT-A-visual-real-subset_real_calvin_visual_subset.pt`, `outputs/weights/ACT-ABC-visual-real-subset_real_calvin_visual_subset.pt`
+- Submission artifacts refreshed:
+  - report: `report/report.pdf`
+  - weights: `outputs/weights/hw3_weights.zip`
+  - checklist: `final_checklist.md`
+
 ## Manual environment probes
 - command: `pwd`
   - result: `/home/zhangzhiwei/homework/shenduxuexi `
@@ -426,4 +457,37 @@ completed. Results in the report must be traceable to logs or generated files.
 - log: `logs/act_real_calvin_subset_20260623_111345.log`
 - success: yes
 - duration_sec: 10
+- gpu note: see nvidia-smi snapshots in the log
+
+## background_counter_3dgs_train
+- start: 2026-06-23T12:47:12+00:00
+- end: 2026-06-23T12:48:07+00:00
+- git commit: 4e0884f
+- command: `bash -lc cd\ third_party/gaussian-splatting\ \&\&\ PYTHONPATH=\'/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\'\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ train.py\ -s\ ../../data/mipnerf360/counter\ -m\ ../../outputs/task1/background_3dgs/counter\ --eval\ -r\ 8\ --iterations\ 1000\ --disable_viewer `
+- output path: `outputs/task1/background_3dgs/counter`
+- log: `logs/background_counter_3dgs_train_20260623_124712.log`
+- success: yes
+- duration_sec: 55
+- gpu note: see nvidia-smi snapshots in the log
+
+## background_counter_3dgs_render
+- start: 2026-06-23T12:48:12+00:00
+- end: 2026-06-23T12:48:59+00:00
+- git commit: 4e0884f
+- command: `bash -lc cd\ third_party/gaussian-splatting\ \&\&\ PYTHONPATH=\'/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\'\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ render.py\ -m\ ../../outputs/task1/background_3dgs/counter `
+- output path: `outputs/task1/background_3dgs/counter`
+- log: `logs/background_counter_3dgs_render_20260623_124812.log`
+- success: yes
+- duration_sec: 47
+- gpu note: see nvidia-smi snapshots in the log
+
+## background_counter_3dgs_metrics
+- start: 2026-06-23T12:48:59+00:00
+- end: 2026-06-23T12:49:36+00:00
+- git commit: 4e0884f
+- command: `bash -lc cd\ third_party/gaussian-splatting\ \&\&\ PYTHONPATH=\'/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\'\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ metrics.py\ -m\ ../../outputs/task1/background_3dgs/counter `
+- output path: `outputs/task1/background_3dgs/counter/results.json`
+- log: `logs/background_counter_3dgs_metrics_20260623_124859.log`
+- success: yes
+- duration_sec: 37
 - gpu note: see nvidia-smi snapshots in the log

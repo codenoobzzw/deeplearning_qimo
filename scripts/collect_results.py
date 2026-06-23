@@ -84,7 +84,10 @@ def parse_colmap_stats(path: Path) -> dict[str, str]:
 
 
 def object_a_metrics() -> str:
-    metrics = read_json(ROOT / "outputs/task1/object_A_3dgs/results.json")
+    return format_metrics(read_json(ROOT / "outputs/task1/object_A_3dgs/results.json"))
+
+
+def format_metrics(metrics: dict) -> str:
     if not metrics:
         return "NA"
     values = metrics.get("ours_1000")
@@ -153,47 +156,52 @@ def write_task1_assets() -> None:
     object_b_gaussian = ROOT / "outputs/task1/merged_scene/intermediate/object_B_sampled.ply"
     object_c_mesh = ROOT / "outputs/task1/object_C_image3d/export/mesh.obj"
     object_c_gaussian = ROOT / "outputs/task1/merged_scene/intermediate/object_C_sampled.ply"
-    background_pc = ROOT / "outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply"
+    background_real_pc = ROOT / "outputs/task1/background_3dgs/counter/point_cloud/iteration_1000/point_cloud.ply"
+    background_proxy_pc = ROOT / "outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply"
+    background_pc = background_real_pc if background_real_pc.exists() else background_proxy_pc
+    background_metrics = format_metrics(read_json(ROOT / "outputs/task1/background_3dgs/counter/results.json"))
+    object_b_sds = ROOT / "third_party/threestudio/outputs/dreamfusion-sd/a_small_yellow_rubber_duck_toy@20260623-121907/save/it1-test.mp4"
+    object_c_zero123 = ROOT / "third_party/threestudio/outputs/zero123-sai/32_cup_rgba.png@20260623-123104/save/it1-test.mp4"
     rows = [
         object_a_row,
         {
             "Asset": "B",
             "Input source": "text prompt",
-            "Method": "threestudio SDS target; procedural text-to-3D proxy used for completed pipeline",
+            "Method": "threestudio DreamFusion/SDS 1-step smoke; procedural text-to-3D proxy used for final fusion",
             "Output representation": "OBJ mesh and sampled Gaussian PLY" if object_b_mesh.exists() else "Mesh, then Gaussian-converted mesh",
-            "Training steps or iterations": "proxy_generated; official SDS not completed" if object_b_mesh.exists() else "not_run",
+            "Training steps or iterations": "official SDS smoke 1 step; proxy mesh for fusion" if object_b_sds.exists() else ("proxy_generated; official SDS not completed" if object_b_mesh.exists() else "not_run"),
             "Number of input images": 0,
             "Number of Gaussians or mesh vertices/faces": f"{obj_stats(object_b_mesh)}; {ply_vertex_count(object_b_gaussian)} sampled Gaussians" if object_b_mesh.exists() else "NA",
-            "Training time": "proxy generation < 1 min",
-            "Peak GPU memory": "CPU/PIL/NumPy proxy",
-            "Main quality observations": "Yellow rubber duck proxy is geometrically simple but usable for Gaussian-level fusion." if object_b_mesh.exists() else "No generated mesh found in outputs.",
+            "Training time": "SDS smoke completed; proxy generation < 1 min",
+            "Peak GPU memory": "SDS smoke on RTX A6000; proxy CPU/PIL/NumPy",
+            "Main quality observations": "Official threestudio/SDS code path ran with a tiny SD model for environment validation; final fused duck still uses the cleaner proxy mesh." if object_b_sds.exists() else ("Yellow rubber duck proxy is geometrically simple but usable for Gaussian-level fusion." if object_b_mesh.exists() else "No generated mesh found in outputs."),
             "Metrics": "NA",
         },
         {
             "Asset": "C",
             "Input source": "single cup image uploaded by student",
-            "Method": "background removal + Zero123 target; single-image geometric proxy used for completed pipeline",
+            "Method": "background removal + stable-Zero123 1-step smoke; single-image geometric proxy used for final fusion",
             "Output representation": "RGBA, OBJ mesh, sampled Gaussian PLY" if object_c_mesh.exists() else "RGBA prepared; mesh if training succeeds",
-            "Training steps or iterations": "preprocess + proxy_generated; official Zero123 not completed" if object_c_mesh.exists() else ("preprocess_only" if exists("outputs/task1/object_C_image3d/cup_rgba.png") else "not_run"),
+            "Training steps or iterations": "stable-Zero123 smoke 1 step; preprocess + proxy mesh for fusion" if object_c_zero123.exists() else ("preprocess + proxy_generated; official Zero123 not completed" if object_c_mesh.exists() else ("preprocess_only" if exists("outputs/task1/object_C_image3d/cup_rgba.png") else "not_run")),
             "Number of input images": 1 if exists("inputs/object_C/cup.jpg") else 0,
             "Number of Gaussians or mesh vertices/faces": f"{obj_stats(object_c_mesh)}; {ply_vertex_count(object_c_gaussian)} sampled Gaussians" if object_c_mesh.exists() else "NA",
-            "Training time": "proxy generation < 1 min",
-            "Peak GPU memory": "CPU/PIL/NumPy proxy",
-            "Main quality observations": "Cup proxy uses the prepared RGBA foreground for color and reconstructs a cylinder/handle prior." if object_c_mesh.exists() else ("Heuristic RGBA exists; inspect handle and cup lid before Zero123 training." if exists("outputs/task1/object_C_image3d/cup_rgba.png") else "RGBA missing."),
+            "Training time": "Zero123 smoke completed; proxy generation < 1 min",
+            "Peak GPU memory": "Zero123 smoke on RTX A6000; proxy CPU/PIL/NumPy",
+            "Main quality observations": "Official stable-Zero123 code path ran with the prepared RGBA image; final fused cup still uses a simple geometric proxy because one step is not enough for a clean mesh." if object_c_zero123.exists() else ("Cup proxy uses the prepared RGBA foreground for color and reconstructs a cylinder/handle prior." if object_c_mesh.exists() else ("Heuristic RGBA exists; inspect handle and cup lid before Zero123 training." if exists("outputs/task1/object_C_image3d/cup_rgba.png") else "RGBA missing.")),
             "Metrics": "NA",
         },
         {
             "Asset": "Background",
-            "Input source": "Mip-NeRF 360 counter preferred",
-            "Method": "3DGS target; counter-like Gaussian proxy used for completed pipeline",
-            "Output representation": latest_point_cloud(ROOT / "outputs/task1/background_3dgs") if background_pc.exists() else "Gaussian PLY if training succeeds",
-            "Training steps or iterations": "proxy mesh sampled to Gaussian; Mip-NeRF360 3DGS not completed" if background_pc.exists() else "not_run",
+            "Input source": "Mip-NeRF 360 counter",
+            "Method": "official 3DGS on Mip-NeRF360 counter; final merged demo uses official counter PLY",
+            "Output representation": str(background_pc.relative_to(ROOT)) if background_pc.exists() else "Gaussian PLY if training succeeds",
+            "Training steps or iterations": "240 images + official sparse/0, 3DGS 1000 iterations, render and metrics" if background_real_pc.exists() else ("proxy mesh sampled to Gaussian; Mip-NeRF360 3DGS not completed" if background_pc.exists() else "not_run"),
             "Number of input images": count_images(ROOT / "data/mipnerf360/counter/images"),
             "Number of Gaussians or mesh vertices/faces": f"{ply_vertex_count(background_pc)} Gaussians" if background_pc.exists() else "NA",
-            "Training time": "proxy generation < 1 min",
-            "Peak GPU memory": "CPU/PIL/NumPy proxy",
-            "Main quality observations": "Counter proxy provides a common spatial environment for A/B/C insertion." if background_pc.exists() else "No Mip-NeRF 360 scene found locally yet.",
-            "Metrics": "NA",
+            "Training time": "train 55s; render 47s; metrics 37s" if background_real_pc.exists() else "proxy generation < 1 min",
+            "Peak GPU memory": "completed on RTX A6000",
+            "Main quality observations": "Official counter 3DGS reconstruction produced a coherent background at 1000 steps; A/B/C were also merged into this official background for the final CPU walkthrough." if background_real_pc.exists() else ("Counter proxy provides a common spatial environment for A/B/C insertion." if background_pc.exists() else "No Mip-NeRF 360 scene found locally yet."),
+            "Metrics": background_metrics,
         },
     ]
     out = ROOT / "report/tables/task1_assets.csv"
@@ -293,18 +301,31 @@ def write_checklist() -> None:
         ("object_A 3DGS point_cloud.ply exists", latest_point_cloud(ROOT / "outputs/task1/object_A_3dgs") != "missing"),
         ("object_A render/metrics exists", exists("outputs/task1/object_A_3dgs/results.json") or bool(list((ROOT / "outputs/task1/object_A_3dgs").glob("**/*.png")))),
         ("object_B mesh exists", bool(list((ROOT / "outputs/task1/object_B_text3d").glob("**/*.obj")))),
+        ("object_B official threestudio SDS smoke output exists", exists("report/figs/object_B_threestudio_sds_smoke.png")),
         ("object_C RGBA exists", exists("outputs/task1/object_C_image3d/cup_rgba.png")),
         ("object_C mesh exists", bool(list((ROOT / "outputs/task1/object_C_image3d").glob("**/*.obj")))),
+        ("object_C official stable-Zero123 smoke output exists", exists("report/figs/object_C_zero123_smoke.png")),
         ("background 3DGS point_cloud.ply exists", latest_point_cloud(ROOT / "outputs/task1/background_3dgs") != "missing"),
+        ("background Mip-NeRF360 counter metrics exist", exists("outputs/task1/background_3dgs/counter/results.json")),
         ("merged scene point_cloud.ply or fallback exists", exists("outputs/task1/merged_scene/point_cloud.ply")),
+        ("official counter merged scene point_cloud.ply exists", exists("outputs/task1/merged_scene_counter/point_cloud.ply")),
         ("merged_scene_walkthrough.mp4 exists", exists("outputs/task1/videos/merged_scene_walkthrough.mp4")),
+        ("official counter merged_scene_walkthrough.mp4 exists", exists("outputs/task1/videos/merged_scene_counter_walkthrough.mp4")),
         ("key frames exist", bool(list((ROOT / "report/figs").glob("task1_merged_*.png")))),
         ("task1_assets.csv exists", exists("report/tables/task1_assets.csv")),
         ("calvin split summary exists", exists("outputs/task2/calvin_split_summary.json")),
         ("ACT-A checkpoint exists", exists("outputs/weights/act_A_proxy.pt") or exists("outputs/weights/act_A_best") or bool(list((ROOT / "outputs/task2/act_A").glob("**/*.safetensors")))),
         ("ACT-ABC checkpoint exists", exists("outputs/weights/act_ABC_proxy.pt") or exists("outputs/weights/act_ABC_best") or bool(list((ROOT / "outputs/task2/act_ABC").glob("**/*.safetensors")))),
+        ("ACT-A real CALVIN subset checkpoint exists", exists("outputs/weights/ACT-A-real-subset_real_calvin_subset.pt")),
+        ("ACT-ABC real CALVIN subset checkpoint exists", exists("outputs/weights/ACT-ABC-real-subset_real_calvin_subset.pt")),
+        ("ACT-A visual CALVIN subset checkpoint exists", exists("outputs/weights/ACT-A-visual-real-subset_real_calvin_visual_subset.pt")),
+        ("ACT-ABC visual CALVIN subset checkpoint exists", exists("outputs/weights/ACT-ABC-visual-real-subset_real_calvin_visual_subset.pt")),
         ("ACT-A curve exists", exists("outputs/task2/act_A/train_log.csv") or bool(list((ROOT / "outputs/task2/act_A").glob("**/*.png")))),
         ("ACT-ABC curve exists", exists("outputs/task2/act_ABC/train_log.csv") or bool(list((ROOT / "outputs/task2/act_ABC").glob("**/*.png")))),
+        ("ACT real CALVIN subset curve exists", exists("report/figs/act_real_calvin_action_l1.png")),
+        ("ACT real CALVIN subset D eval table exists", exists("report/tables/task2_real_calvin_eval_D.csv")),
+        ("ACT visual CALVIN subset curve exists", exists("report/figs/act_visual_calvin_action_l1.png")),
+        ("ACT visual CALVIN subset D eval table exists", exists("report/tables/task2_visual_calvin_eval_D.csv")),
         ("environment D eval table exists", exists("report/tables/task2_eval_D.csv")),
         ("README.md exists", exists("README.md")),
         ("report/report.pdf exists", exists("report/report.pdf")),

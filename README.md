@@ -1,218 +1,199 @@
 # 深度学习与空间智能期末作业工程
 
-本项目对应“基于 3DGS/AIGC 的多源资产融合与 ACT 跨环境泛化实验”。工程已按可复现方式组织脚本、输入、日志、表格和报告；所有已写入报告的状态都来自真实运行日志或真实输出，没有补造训练指标。当前版本包含三条线：3DGS/threestudio/Zero123/LeRobot 的官方入口、在外部模型权重和 Mip-NeRF360 大数据不可用时跑通的 A/B/C/背景替代融合闭环，以及基于 `xiaoma26/calvin-lerobot` 真实 parquet 子集的 LeRobot ACTPolicy 离线实验。
+姓名：张之蔚
+学号：25210980169
+小组成员：独立完成
+GitHub：https://github.com/codenoobzzw/deeplearning_qimo.git
+权重网盘：https://pan.baidu.com/s/18O2o9Fr9d0nntlCZjT-jNA?pwd=1111 ，提取码：1111
+
+本工程对应课程期末作业：任务一完成 3DGS/AIGC 多源资产生成与融合，任务二完成 LeRobot ACT 在 CALVIN A/B/C/D 环境上的离线泛化实验。报告、脚本、结果表和权重包都已经放在工程内，核心结论以真实运行日志和输出文件为准。
+
+## 重要说明
+
+服务器环境里默认可能有 127.0.0.1:1080 代理变量。本工程在安装包、下载 HuggingFace/CALVIN/Mip-NeRF360 数据时都不要走 1080 端口，命令统一加：
+
+```bash
+env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u all_proxy ...
+```
+
+本次实际产物：
+
+- 报告：`report/report.pdf`
+- 权重包：`outputs/weights/hw3_weights.zip`
+- 物体 A 3DGS：`outputs/task1/object_A_3dgs/point_cloud/iteration_1000/point_cloud.ply`
+- Mip-NeRF360 counter 背景 3DGS：`outputs/task1/background_3dgs/counter/point_cloud/iteration_1000/point_cloud.ply`
+- official-counter 融合点云：`outputs/task1/merged_scene_counter/point_cloud.ply`
+- official-counter 漫游视频：`outputs/task1/videos/merged_scene_counter_walkthrough.mp4`
+- 视觉 ACT 结果表：`report/tables/task2_visual_calvin_eval_D.csv`
+- 最终检查清单：`final_checklist.md`
 
 ## 目录结构
 
-- `inputs/`: 学生上传的物体 A 多视角照片/视频、物体 C 杯子照片。
-- `物体/`: 原始拍摄文件备份，与 `inputs/` 中规范化后的输入文件一一对应。
-- `data/`: 预处理后的 COLMAP/3DGS/CALVIN 数据目录。
-- `third_party/`: 官方 `gaussian-splatting`、`threestudio`、`lerobot`、`calvin` 仓库。
-- `scripts/`: 数据准备、训练入口、Gaussian/Mesh 转换、结果收集脚本。
-- `outputs/`: 实验输出、日志派生结果、权重压缩包。
-- `report/`: 中文 LaTeX 报告、图、表、参考文献。
-- `logs/`: 系统探测、安装、COLMAP、预处理、CLI 探测日志。
+- `inputs/`：规范化后的物体 A 视频/照片和物体 C 单图。
+- `物体/`：原始拍摄文件备份。
+- `configs/`：Gaussian 融合 placement 配置。
+- `scripts/`：数据准备、训练、合并、渲染、汇总脚本。
+- `report/`：LaTeX 报告、图、表和最终 PDF。
+- `outputs/`：实验输出、权重、视频、日志派生结果。
+- `requirements/`：环境参考文件。
+- `third_party/`、`local_pkgs/`、`data/`：本地第三方仓库、依赖和数据缓存，默认不上传 GitHub。
 
-## 已验证环境
+## 环境概况
 
-系统探测记录在 `logs/system_info.txt`。普通沙箱下 `nvidia-smi` 不可见；提权运行可见 3 张 NVIDIA RTX A6000，CUDA 12.4。PG 环境为 Python 3.12.9，适合运行数据/报告脚本，但没有 PyTorch。项目已使用 conda `base` 的 PyTorch 2.6.0+cu124，并把 3DGS/LeRobot 补充依赖安装在：
+已验证服务器 GPU：NVIDIA RTX A6000，CUDA 12.4。
 
-- `local_pkgs/3dgs`
-- `local_pkgs/lerobot`
+本次实际使用：
 
-运行 3DGS/LeRobot 时需要设置对应 `PYTHONPATH`，相关训练脚本已内置。
+- PG 环境：运行预处理、报告和部分 Python 工具。
+- base 环境：运行 3DGS 与 LeRobot ACT，PyTorch 2.6.0+cu124。
+- `envs/threestudio310`：运行 threestudio DreamFusion/SDS 与 stable-Zero123 烟测。
 
-## 数据准备
+threestudio 因 GitHub 直连安装 `tiny-cuda-nn`、`nvdiffrast` 不稳定，工程中补了轻量兼容 shim，保证官方 volume/SDS/Zero123 入口可以完成小步数 smoke run。完整长训练建议在网络更稳定时安装原版 CUDA 扩展。
 
-物体 A 原始照片和后续补拍视频已放入：
+## 任务一复现
 
-```bash
-inputs/object_A/
-inputs/object_A/A_video.mp4
-```
-
-物体 C 杯子照片已放入：
+### 1. 物体 A：视频抽帧 + COLMAP + 3DGS
 
 ```bash
-inputs/object_C/cup.jpg
-```
-
-重新预处理：
-
-```bash
-/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/extract_frames.py
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/extract_frames.py \
   --input inputs/object_A/A_video.mp4 \
   --output data/object_A_video/input \
   --stats outputs/task1/object_A_video_frame_stats.json \
   --fps 6 --blur-quantile 0.03 --similarity-threshold 0.999
+
+ITERATIONS=1000 RESOLUTION="-r 2" bash scripts/train_3dgs_object.sh
+```
+
+本次结果：90 张抽帧，COLMAP 注册 63 张；3DGS 1000 step 后得到 19133 个 Gaussian，PSNR/SSIM/LPIPS 为 23.9658/0.8707/0.2323。
+
+### 2. 物体 B：threestudio DreamFusion/SDS
+
+官方 SDS 烟测命令：
+
+```bash
+bash scripts/run_threestudio_object_B_smoke.sh
+```
+
+实际输出：
+
+- `third_party/threestudio/outputs/dreamfusion-sd/a_small_yellow_rubber_duck_toy@20260623-121907/ckpts/last.ckpt`
+- `report/figs/object_B_threestudio_sds_smoke.png`
+
+说明：这里使用 tiny Stable Diffusion 做 1 step smoke run，用来验证 threestudio/SDS 代码路径；最终融合展示使用同提示词生成的鸭子 proxy mesh：`outputs/task1/object_B_text3d/export/mesh.obj`。
+
+### 3. 物体 C：去背景 + stable-Zero123
+
+```bash
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/preprocess_object_c.py
+bash scripts/run_zero123_object_C_smoke.sh
 ```
 
-物体 C 的去背景结果是启发式 RGBA，不是 rembg/SAM 级别的精细 matting，输出见 `outputs/task1/figures/object_C_bg_removal.png`。原始拍摄文件同时保留在 `物体/` 目录中，便于老师核对原始输入。
+实际输出：
 
-## 第三方仓库与依赖
+- `outputs/task1/object_C_image3d/cup_rgba.png`
+- `third_party/threestudio/outputs/zero123-sai/32_cup_rgba.png@20260623-123104/ckpts/last.ckpt`
+- `report/figs/object_C_zero123_smoke.png`
 
-第三方仓库可复现克隆：
+说明：stable-Zero123 权重已经下载并跑通 1 step smoke run；最终融合展示使用基于单图外观生成的杯子 proxy mesh：`outputs/task1/object_C_image3d/export/mesh.obj`。
+
+### 4. Mip-NeRF360 counter 背景 3DGS
+
+下载时不走 1080 代理：
 
 ```bash
-bash scripts/setup_third_party.sh
+mkdir -p data/mipnerf360
+env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u all_proxy \
+  curl -L --retry 5 --retry-delay 5 -C - \
+  -o data/mipnerf360/360_v2.zip \
+  https://storage.googleapis.com/gresearch/refraw360/360_v2.zip
+
+unzip -q data/mipnerf360/360_v2.zip 'counter/*' -d data/mipnerf360
 ```
 
-本次实际 clone 的 commit 已记录在 `run_manifest.md` 和 `logs/setup_third_party_retry_*.log`。3DGS 官方 `convert.py` 针对系统 COLMAP 3.6 做了一个兼容补丁：移除了当前 COLMAP 不支持的 `--Mapper.ba_global_function_tolerance` 参数。
-
-3DGS 本地依赖安装命令已记录在 `run_manifest.md`，核心形式为：
+训练与评估：
 
 ```bash
-PIP_CACHE_DIR=/tmp/hw3_pip_cache \
-/home/zhangzhiwei/miniconda3/bin/conda run -n base python -m pip install \
-  --target local_pkgs/3dgs plyfile \
-  ./third_party/gaussian-splatting/submodules/diff-gaussian-rasterization \
-  ./third_party/gaussian-splatting/submodules/simple-knn \
-  ./third_party/gaussian-splatting/submodules/fused-ssim
+SCENE=counter ITERATIONS=1000 RESOLUTION="-r 8" CUDA_VISIBLE_DEVICES=0 \
+  bash scripts/train_3dgs_background.sh
 ```
 
-LeRobot 轻量依赖安装后，`lerobot_train --help` 已可通过源码模块运行，完整 help 保存为 `logs/lerobot_train_help.txt`。
+本次结果：240 张图，初始化 155767 点，最终 210622 个 Gaussian，PSNR/SSIM/LPIPS 为 24.5242/0.8315/0.1954。
 
-## 训练与测试命令
-
-物体 A 3DGS：
+### 5. A/B/C 插入 counter 背景并渲染视频
 
 ```bash
-bash scripts/train_3dgs_object.sh
-```
-
-本次 6 张原始照片的 COLMAP baseline 仍失败，原因是 `No good initial image pair found`；补拍的 `A_video.mp4` 解决了视角覆盖问题。默认脚本现在使用 `data/object_A_video`，可通过 `SOURCE_DIR`、`OUTPUT_DIR`、`ITERATIONS` 覆盖。已完成的 sanity run 为 90 张抽帧、63 张注册、19133 个 Gaussian、1000 iterations，测试集指标为 PSNR 23.9658、SSIM 0.8707、LPIPS 0.2323。
-
-物体 B 文本到 3D：
-
-```bash
-bash scripts/run_threestudio_object_B.sh
-```
-
-如果 threestudio 依赖或扩散模型权重不可用，本工程提供已运行的代理资产生成：
-
-```bash
-/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/generate_proxy_assets.py
-```
-
-物体 C 单图到 3D：
-
-```bash
-bash scripts/run_zero123_object_C.sh
-```
-
-背景 3DGS：
-
-```bash
-SCENE=counter bash scripts/train_3dgs_background.sh
-```
-
-完整融合与 CPU fallback 漫游渲染：
-
-```bash
-/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/mesh_to_gaussians.py \
-  --mesh outputs/task1/background_3dgs/counter_proxy/export/mesh.obj \
-  --output outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply \
-  --sample-points 32000 --opacity 0.65 --seed 11
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/merge_gaussians.py \
-  --config configs/placements.yaml \
-  --output outputs/task1/merged_scene/point_cloud.ply \
-  --workdir outputs/task1/merged_scene/intermediate
+  --config configs/placements_official_counter.yaml \
+  --output outputs/task1/merged_scene_counter/point_cloud.ply \
+  --workdir outputs/task1/merged_scene_counter/intermediate
+
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/render_merged_path.py \
-  --input outputs/task1/merged_scene/point_cloud.ply \
-  --video-output outputs/task1/videos/merged_scene_walkthrough.mp4 \
-  --frames-dir outputs/task1/merged_scene/preview_frames \
-  --num-frames 72 --width 960 --height 540 --point-radius 2
+  --input outputs/task1/merged_scene_counter/point_cloud.ply \
+  --video-output outputs/task1/videos/merged_scene_counter_walkthrough.mp4 \
+  --frames-dir outputs/task1/merged_scene_counter/preview_frames \
+  --num-frames 48 --width 960 --height 540 --point-radius 1
 ```
 
-LeRobot ACT：
+本次结果：293755 个 Gaussian 合并为 official-counter 场景，视频已生成。
+
+## 任务二复现
+
+真实数据来自 `xiaoma26/calvin-lerobot`，本次下载 splitA/B/C/D 每个 split 前 4 个 parquet episode。下载数据时同样不走 1080 代理。
+
+state-only ACT 子集实验：
 
 ```bash
-/home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/prepare_calvin_splits.py --fallback-known-splits
-bash scripts/train_act_A.sh
-bash scripts/train_act_ABC.sh
-bash scripts/eval_act_D.sh
-```
-
-全量 `xiaoma26/calvin-lerobot` 约 69.9GB，本工程没有下载全量数据。为了补上真实数据实验，已下载 `splitA/splitB/splitC/splitD` 每个 split 前 4 个 parquet episode，并运行 LeRobot 官方 `ACTPolicy` 的离线 action chunking 子集训练：
-
-```bash
-/home/zhangzhiwei/miniconda3/bin/conda run -n PG python -c "from pathlib import Path; from huggingface_hub import hf_hub_download; repo='xiaoma26/calvin-lerobot'; out=Path('data/calvin/calvin-lerobot-subset'); splits=['splitA','splitB','splitC','splitD']; meta=['info.json','modality.json','episodes.jsonl','tasks.jsonl']; [hf_hub_download(repo, f'{s}/meta/{m}', repo_type='dataset', local_dir=str(out)) for s in splits for m in meta]; [hf_hub_download(repo, f'{s}/data/chunk-000/episode_{i:06d}.parquet', repo_type='dataset', local_dir=str(out)) for s in splits for i in range(4)]"
-MPLCONFIGDIR=/tmp/hw3_mpl XDG_CACHE_HOME=/tmp/hw3_cache \
-/home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_calvin_subset.py \
+env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u all_proxy \
+  MPLCONFIGDIR=/tmp/hw3_cache/mpl \
+  /home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_calvin_subset.py \
   --episodes-per-split 4 --steps 40 --log-every 10 --chunk-size 8 --stride 4 --batch-size 16
 ```
 
-真实子集实验使用 state/environment_state 输入，未使用图像 CNN，也不是 CALVIN simulator rollout success rate。结果见 `outputs/task2/real_calvin_subset_summary.json`、`report/tables/task2_real_calvin_eval_D.csv`、`report/figs/act_real_calvin_action_l1.png`。
-
-为了补齐作业要求中的训练曲线、D 环境评估和权重包，本工程还提供一个已运行的 ACT-style action chunking 代理实验：
+视觉 ACT 子集实验：
 
 ```bash
-MPLCONFIGDIR=/tmp/hw3_mpl XDG_CACHE_HOME=/tmp/hw3_cache \
-/home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_proxy.py \
-  --steps 800 --log-every 20
+env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u http_proxy -u https_proxy -u all_proxy \
+  MPLCONFIGDIR=/tmp/hw3_cache/mpl \
+  /home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_calvin_visual_subset.py \
+  --episodes-per-split 4 --steps 30 --log-every 10 --batch-size 8 --image-size 64 \
+  --dim-model 64 --n-heads 4 --dim-feedforward 256 --n-encoder-layers 2
 ```
 
-该代理实验不是 CALVIN 真实 success rate；它模拟 A/B/C/D 视觉分布偏移，使用同一 chunk policy 和超参数训练 ACT-A 与 ACT-ABC，并在 D 上输出 Action L1 与 success rate。
+视觉 ACT splitD 离线结果：
 
-## 结果复现
+| 模型 | D mean L1 | D median L1 | L1 < 0.05 | L1 < 0.10 |
+| --- | ---: | ---: | ---: | ---: |
+| ACT-A-visual-real-subset | 0.278258 | 0.263635 | 0.000000 | 0.000000 |
+| ACT-ABC-visual-real-subset | 0.286543 | 0.235508 | 0.000000 | 0.073529 |
 
-已实际运行并生成输出：
+该结果是离线 Action L1，不是 CALVIN simulator rollout 成功率。
+
+## 报告和权重
+
+重新生成图表、权重包和检查清单：
 
 ```bash
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/make_report_assets.py
 /home/zhangzhiwei/miniconda3/bin/conda run -n PG python scripts/collect_results.py
+```
+
+重新编译报告：
+
+```bash
 latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=report report/main.tex
 cp report/main.pdf report/report.pdf
 ```
 
-关键输出：
+当前 `outputs/weights/hw3_weights.zip` 包含：
 
-- 报告：`report/report.pdf`
-- 物体 A 3DGS：`outputs/task1/object_A_3dgs/point_cloud/iteration_1000/point_cloud.ply`
-- 物体 A 渲染指标：`outputs/task1/object_A_3dgs/results.json`
-- 物体 A 渲染预览：`report/figs/object_A_3dgs_render_preview.png`
-- 物体 B 代理 mesh：`outputs/task1/object_B_text3d/export/mesh.obj`
-- 物体 C 代理 mesh：`outputs/task1/object_C_image3d/export/mesh.obj`
-- 物体 C RGBA：`outputs/task1/object_C_image3d/cup_rgba.png`
-- 背景代理 Gaussian：`outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply`
-- 合并场景 PLY：`outputs/task1/merged_scene/point_cloud.ply`
-- 漫游视频：`outputs/task1/videos/merged_scene_walkthrough.mp4`
-- ACT 真实子集曲线：`report/figs/act_real_calvin_action_l1.png`
-- ACT 真实子集 D 评估：`report/tables/task2_real_calvin_eval_D.csv`
-- ACT proxy 曲线：`report/figs/act_action_l1_loss.png`
-- ACT proxy D 评估：`report/tables/task2_eval_D.csv`
-- 背景去除对比图：`outputs/task1/figures/object_C_bg_removal.png`
-- 结果表：`report/tables/task1_assets.csv`
-- CALVIN 探测表：`report/tables/calvin_split_summary.csv`
-- 权重压缩包：`outputs/weights/hw3_weights.zip`
-- 最终检查：`final_checklist.md`
+- ACT proxy 权重；
+- state-only ACT 真实 CALVIN 子集权重；
+- visual ACT 真实 CALVIN 子集权重；
+- Object A 3DGS point cloud；
+- Mip-NeRF360 counter background 3DGS point cloud；
+- official-counter merged scene point cloud；
+- threestudio SDS / stable-Zero123 smoke ckpt。
 
-## 常见问题
+## 提交注意
 
-- CUDA OOM：降低 `ITERATIONS`、`RESOLUTION="-r 8"`，或换空闲 GPU。
-- COLMAP 失败：6 张照片不足以初始化稳定几何；优先使用 `A_video.mp4` 或重新拍摄 80-180 张环绕照片，保证相邻视角重叠和足够基线。
-- threestudio/Zero123 依赖重：建议单独创建 `requirements/env_threestudio.yml` 环境，避免污染 base；当前报告中的 B/C 完整融合使用明确标注的代理 mesh。
-- Mip-NeRF360 数据大：当前背景完整融合使用 counter-like 代理 Gaussian；如能下载 counter/garden/bicycle，可用 `scripts/train_3dgs_background.sh` 替换代理背景。
-- CALVIN/Hugging Face：全量数据很大，当前只下载每个 split 的 4 个 episode 做真实子集实验；当前 ACT 结果是离线 Action L1，不冒充 simulator 成功率。
-
-## GitHub 与权重
-
-GitHub 仓库：
-
-```text
-https://github.com/codenoobzzw/deeplearning_qimo.git
-git@github.com:codenoobzzw/deeplearning_qimo.git
-```
-
-本工程已包含源码、脚本、输入文件、日志、报告图表、关键输出和提交检查清单。`third_party/`、`local_pkgs/` 和 `data/` 默认不上传到 GitHub，避免把第三方仓库、本地依赖和中间数据缓存一起塞进仓库。
-
-`outputs/weights/hw3_weights.zip` 当前包含 `act_A_proxy.pt`、`act_ABC_proxy.pt`、`ACT-A-real-subset_real_calvin_subset.pt` 与 `ACT-ABC-real-subset_real_calvin_subset.pt`；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。
-
-模型权重百度网盘分享：
-
-```text
-链接：https://pan.baidu.com/s/18O2o9Fr9d0nntlCZjT-jNA?pwd=1111
-提取码：1111
-```
+GitHub 仓库上传源码、脚本、配置、报告、图表、关键小型输出和权重 zip。`data/`、`third_party/`、`local_pkgs/`、`envs/` 默认不上传，避免把 12GB 数据包、第三方仓库和 conda 环境塞进仓库。原始拍摄文件已保留在 `物体/` 和 `inputs/` 中。

@@ -1,0 +1,471 @@
+# background_counter_3dgs_render
+start: 2026-06-23T12:48:12+00:00
+project_root: /home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project
+git_commit: 4e0884f
+expected_output: outputs/task1/background_3dgs/counter
+command: bash -lc cd\ third_party/gaussian-splatting\ \&\&\ PYTHONPATH=\'/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\'\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ render.py\ -m\ ../../outputs/task1/background_3dgs/counter
+
+## nvidia-smi before
+Tue Jun 23 12:48:12 2026
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 30%   51C    P0             79W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   43C    P0             78W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   40C    P0             77W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+## command output
+
+Rendering progress:   0%|          | 0/210 [00:00<?, ?it/s]
+Rendering progress:   0%|          | 1/210 [00:00<00:47,  4.44it/s]
+Rendering progress:   1%|▏         | 3/210 [00:00<00:23,  8.96it/s]
+Rendering progress:   2%|▏         | 5/210 [00:00<00:18, 11.00it/s]
+Rendering progress:   3%|▎         | 7/210 [00:00<00:16, 12.21it/s]
+Rendering progress:   4%|▍         | 9/210 [00:00<00:15, 12.99it/s]
+Rendering progress:   5%|▌         | 11/210 [00:00<00:14, 13.41it/s]
+Rendering progress:   6%|▌         | 13/210 [00:01<00:14, 13.66it/s]
+Rendering progress:   7%|▋         | 15/210 [00:01<00:14, 13.67it/s]
+Rendering progress:   8%|▊         | 17/210 [00:01<00:14, 13.73it/s]
+Rendering progress:   9%|▉         | 19/210 [00:01<00:13, 13.78it/s]
+Rendering progress:  10%|█         | 21/210 [00:01<00:13, 13.90it/s]
+Rendering progress:  11%|█         | 23/210 [00:01<00:13, 14.02it/s]
+Rendering progress:  12%|█▏        | 25/210 [00:01<00:13, 14.17it/s]
+Rendering progress:  13%|█▎        | 27/210 [00:02<00:12, 14.11it/s]
+Rendering progress:  14%|█▍        | 29/210 [00:02<00:12, 14.05it/s]
+Rendering progress:  15%|█▍        | 31/210 [00:02<00:12, 14.06it/s]
+Rendering progress:  16%|█▌        | 33/210 [00:02<00:12, 14.04it/s]
+Rendering progress:  17%|█▋        | 35/210 [00:02<00:12, 14.01it/s]
+Rendering progress:  18%|█▊        | 37/210 [00:02<00:12, 14.24it/s]
+Rendering progress:  19%|█▊        | 39/210 [00:02<00:11, 14.43it/s]
+Rendering progress:  20%|█▉        | 41/210 [00:03<00:11, 14.48it/s]
+Rendering progress:  20%|██        | 43/210 [00:03<00:11, 14.35it/s]
+Rendering progress:  21%|██▏       | 45/210 [00:03<00:11, 14.18it/s]
+Rendering progress:  22%|██▏       | 47/210 [00:03<00:11, 14.14it/s]
+Rendering progress:  23%|██▎       | 49/210 [00:03<00:11, 14.15it/s]
+Rendering progress:  24%|██▍       | 51/210 [00:03<00:11, 14.26it/s]
+Rendering progress:  25%|██▌       | 53/210 [00:03<00:10, 14.40it/s]
+Rendering progress:  26%|██▌       | 55/210 [00:04<00:10, 14.35it/s]
+Rendering progress:  27%|██▋       | 57/210 [00:04<00:10, 14.64it/s]
+Rendering progress:  28%|██▊       | 59/210 [00:04<00:10, 14.68it/s]
+Rendering progress:  29%|██▉       | 61/210 [00:04<00:10, 14.72it/s]
+Rendering progress:  30%|███       | 63/210 [00:04<00:09, 14.83it/s]
+Rendering progress:  31%|███       | 65/210 [00:04<00:09, 14.82it/s]
+Rendering progress:  32%|███▏      | 67/210 [00:04<00:09, 14.86it/s]
+Rendering progress:  33%|███▎      | 69/210 [00:04<00:09, 14.85it/s]
+Rendering progress:  34%|███▍      | 71/210 [00:05<00:09, 14.78it/s]
+Rendering progress:  35%|███▍      | 73/210 [00:05<00:09, 14.82it/s]
+Rendering progress:  36%|███▌      | 75/210 [00:05<00:09, 14.78it/s]
+Rendering progress:  37%|███▋      | 77/210 [00:05<00:08, 14.84it/s]
+Rendering progress:  38%|███▊      | 79/210 [00:05<00:08, 14.89it/s]
+Rendering progress:  39%|███▊      | 81/210 [00:05<00:08, 14.90it/s]
+Rendering progress:  40%|███▉      | 83/210 [00:05<00:08, 14.73it/s]
+Rendering progress:  40%|████      | 85/210 [00:06<00:08, 14.72it/s]
+Rendering progress:  41%|████▏     | 87/210 [00:06<00:08, 14.85it/s]
+Rendering progress:  42%|████▏     | 89/210 [00:06<00:08, 15.06it/s]
+Rendering progress:  43%|████▎     | 91/210 [00:06<00:07, 15.07it/s]
+Rendering progress:  44%|████▍     | 93/210 [00:06<00:07, 15.00it/s]
+Rendering progress:  45%|████▌     | 95/210 [00:06<00:07, 14.90it/s]
+Rendering progress:  46%|████▌     | 97/210 [00:06<00:07, 14.86it/s]
+Rendering progress:  47%|████▋     | 99/210 [00:06<00:07, 14.71it/s]
+Rendering progress:  48%|████▊     | 101/210 [00:07<00:07, 14.64it/s]
+Rendering progress:  49%|████▉     | 103/210 [00:07<00:07, 14.59it/s]
+Rendering progress:  50%|█████     | 105/210 [00:07<00:07, 14.64it/s]
+Rendering progress:  51%|█████     | 107/210 [00:07<00:07, 14.66it/s]
+Rendering progress:  52%|█████▏    | 109/210 [00:07<00:06, 14.77it/s]
+Rendering progress:  53%|█████▎    | 111/210 [00:07<00:06, 14.92it/s]
+Rendering progress:  54%|█████▍    | 113/210 [00:07<00:06, 14.96it/s]
+Rendering progress:  55%|█████▍    | 115/210 [00:08<00:06, 14.84it/s]
+Rendering progress:  56%|█████▌    | 117/210 [00:08<00:06, 14.64it/s]
+Rendering progress:  57%|█████▋    | 119/210 [00:08<00:06, 14.47it/s]
+Rendering progress:  58%|█████▊    | 121/210 [00:08<00:06, 14.33it/s]
+Rendering progress:  59%|█████▊    | 123/210 [00:08<00:06, 14.28it/s]
+Rendering progress:  60%|█████▉    | 125/210 [00:08<00:06, 14.15it/s]
+Rendering progress:  60%|██████    | 127/210 [00:08<00:05, 13.98it/s]
+Rendering progress:  61%|██████▏   | 129/210 [00:09<00:05, 14.12it/s]
+Rendering progress:  62%|██████▏   | 131/210 [00:09<00:05, 14.34it/s]
+Rendering progress:  63%|██████▎   | 133/210 [00:09<00:05, 14.51it/s]
+Rendering progress:  64%|██████▍   | 135/210 [00:09<00:05, 14.58it/s]
+Rendering progress:  65%|██████▌   | 137/210 [00:09<00:05, 14.38it/s]
+Rendering progress:  66%|██████▌   | 139/210 [00:09<00:04, 14.23it/s]
+Rendering progress:  67%|██████▋   | 141/210 [00:09<00:04, 13.96it/s]
+Rendering progress:  68%|██████▊   | 143/210 [00:10<00:04, 13.73it/s]
+Rendering progress:  69%|██████▉   | 145/210 [00:10<00:04, 13.63it/s]
+Rendering progress:  70%|███████   | 147/210 [00:10<00:04, 13.60it/s]
+Rendering progress:  71%|███████   | 149/210 [00:10<00:04, 13.60it/s]
+Rendering progress:  72%|███████▏  | 151/210 [00:10<00:04, 13.59it/s]
+Rendering progress:  73%|███████▎  | 153/210 [00:10<00:04, 13.74it/s]
+Rendering progress:  74%|███████▍  | 155/210 [00:10<00:03, 13.87it/s]
+Rendering progress:  75%|███████▍  | 157/210 [00:11<00:03, 13.94it/s]
+Rendering progress:  76%|███████▌  | 159/210 [00:11<00:03, 13.93it/s]
+Rendering progress:  77%|███████▋  | 161/210 [00:11<00:03, 13.91it/s]
+Rendering progress:  78%|███████▊  | 163/210 [00:11<00:03, 13.73it/s]
+Rendering progress:  79%|███████▊  | 165/210 [00:11<00:03, 13.54it/s]
+Rendering progress:  80%|███████▉  | 167/210 [00:11<00:03, 13.39it/s]
+Rendering progress:  80%|████████  | 169/210 [00:11<00:03, 13.40it/s]
+Rendering progress:  81%|████████▏ | 171/210 [00:12<00:02, 13.42it/s]
+Rendering progress:  82%|████████▏ | 173/210 [00:12<00:02, 13.55it/s]
+Rendering progress:  83%|████████▎ | 175/210 [00:12<00:02, 13.54it/s]
+Rendering progress:  84%|████████▍ | 177/210 [00:12<00:02, 13.71it/s]
+Rendering progress:  85%|████████▌ | 179/210 [00:12<00:02, 13.82it/s]
+Rendering progress:  86%|████████▌ | 181/210 [00:12<00:02, 13.90it/s]
+Rendering progress:  87%|████████▋ | 183/210 [00:12<00:01, 13.89it/s]
+Rendering progress:  88%|████████▊ | 185/210 [00:13<00:01, 13.90it/s]
+Rendering progress:  89%|████████▉ | 187/210 [00:13<00:01, 13.85it/s]
+Rendering progress:  90%|█████████ | 189/210 [00:13<00:01, 13.78it/s]
+Rendering progress:  91%|█████████ | 191/210 [00:13<00:01, 13.96it/s]
+Rendering progress:  92%|█████████▏| 193/210 [00:13<00:01, 14.15it/s]
+Rendering progress:  93%|█████████▎| 195/210 [00:13<00:01, 14.22it/s]
+Rendering progress:  94%|█████████▍| 197/210 [00:13<00:00, 14.19it/s]
+Rendering progress:  95%|█████████▍| 199/210 [00:14<00:00, 14.13it/s]
+Rendering progress:  96%|█████████▌| 201/210 [00:14<00:00, 14.05it/s]
+Rendering progress:  97%|█████████▋| 203/210 [00:14<00:00, 14.09it/s]
+Rendering progress:  98%|█████████▊| 205/210 [00:14<00:00, 14.02it/s]
+Rendering progress:  99%|█████████▊| 207/210 [00:14<00:00, 13.96it/s]
+Rendering progress: 100%|█████████▉| 209/210 [00:14<00:00, 13.97it/s]
+Rendering progress: 100%|██████████| 210/210 [00:14<00:00, 14.09it/s]
+
+Rendering progress:   0%|          | 0/30 [00:00<?, ?it/s]
+Rendering progress:   7%|▋         | 2/30 [00:00<00:02, 13.96it/s]
+Rendering progress:  13%|█▎        | 4/30 [00:00<00:01, 13.71it/s]
+Rendering progress:  20%|██        | 6/30 [00:00<00:01, 13.94it/s]
+Rendering progress:  27%|██▋       | 8/30 [00:00<00:01, 13.98it/s]
+Rendering progress:  33%|███▎      | 10/30 [00:00<00:01, 14.39it/s]
+Rendering progress:  40%|████      | 12/30 [00:00<00:01, 14.48it/s]
+Rendering progress:  47%|████▋     | 14/30 [00:00<00:01, 14.63it/s]
+Rendering progress:  53%|█████▎    | 16/30 [00:01<00:00, 14.69it/s]
+Rendering progress:  60%|██████    | 18/30 [00:01<00:00, 14.19it/s]
+Rendering progress:  67%|██████▋   | 20/30 [00:01<00:00, 14.19it/s]
+Rendering progress:  73%|███████▎  | 22/30 [00:01<00:00, 14.04it/s]
+Rendering progress:  80%|████████  | 24/30 [00:01<00:00, 14.09it/s]
+Rendering progress:  87%|████████▋ | 26/30 [00:01<00:00, 13.90it/s]
+Rendering progress:  93%|█████████▎| 28/30 [00:01<00:00, 13.97it/s]
+Rendering progress: 100%|██████████| 30/30 [00:02<00:00, 14.04it/s]
+Rendering progress: 100%|██████████| 30/30 [00:02<00:00, 14.14it/s]
+
+Looking for config file in ../../outputs/task1/background_3dgs/counter/cfg_args
+Config file found: ../../outputs/task1/background_3dgs/counter/cfg_args
+Rendering ../../outputs/task1/background_3dgs/counter
+Loading trained model at iteration 1000 [23/06 12:48:18]
+------------LLFF HOLD------------- [23/06 12:48:19]
+
+Reading camera 1/240
+Reading camera 2/240
+Reading camera 3/240
+Reading camera 4/240
+Reading camera 5/240
+Reading camera 6/240
+Reading camera 7/240
+Reading camera 8/240
+Reading camera 9/240
+Reading camera 10/240
+Reading camera 11/240
+Reading camera 12/240
+Reading camera 13/240
+Reading camera 14/240
+Reading camera 15/240
+Reading camera 16/240
+Reading camera 17/240
+Reading camera 18/240
+Reading camera 19/240
+Reading camera 20/240
+Reading camera 21/240
+Reading camera 22/240
+Reading camera 23/240
+Reading camera 24/240
+Reading camera 25/240
+Reading camera 26/240
+Reading camera 27/240
+Reading camera 28/240
+Reading camera 29/240
+Reading camera 30/240
+Reading camera 31/240
+Reading camera 32/240
+Reading camera 33/240
+Reading camera 34/240
+Reading camera 35/240
+Reading camera 36/240
+Reading camera 37/240
+Reading camera 38/240
+Reading camera 39/240
+Reading camera 40/240
+Reading camera 41/240
+Reading camera 42/240
+Reading camera 43/240
+Reading camera 44/240
+Reading camera 45/240
+Reading camera 46/240
+Reading camera 47/240
+Reading camera 48/240
+Reading camera 49/240
+Reading camera 50/240
+Reading camera 51/240
+Reading camera 52/240
+Reading camera 53/240
+Reading camera 54/240
+Reading camera 55/240
+Reading camera 56/240
+Reading camera 57/240
+Reading camera 58/240
+Reading camera 59/240
+Reading camera 60/240
+Reading camera 61/240
+Reading camera 62/240
+Reading camera 63/240
+Reading camera 64/240
+Reading camera 65/240
+Reading camera 66/240
+Reading camera 67/240
+Reading camera 68/240
+Reading camera 69/240
+Reading camera 70/240
+Reading camera 71/240
+Reading camera 72/240
+Reading camera 73/240
+Reading camera 74/240
+Reading camera 75/240
+Reading camera 76/240
+Reading camera 77/240
+Reading camera 78/240
+Reading camera 79/240
+Reading camera 80/240
+Reading camera 81/240
+Reading camera 82/240
+Reading camera 83/240
+Reading camera 84/240
+Reading camera 85/240
+Reading camera 86/240
+Reading camera 87/240
+Reading camera 88/240
+Reading camera 89/240
+Reading camera 90/240
+Reading camera 91/240
+Reading camera 92/240
+Reading camera 93/240
+Reading camera 94/240
+Reading camera 95/240
+Reading camera 96/240
+Reading camera 97/240
+Reading camera 98/240
+Reading camera 99/240
+Reading camera 100/240
+Reading camera 101/240
+Reading camera 102/240
+Reading camera 103/240
+Reading camera 104/240
+Reading camera 105/240
+Reading camera 106/240
+Reading camera 107/240
+Reading camera 108/240
+Reading camera 109/240
+Reading camera 110/240
+Reading camera 111/240
+Reading camera 112/240
+Reading camera 113/240
+Reading camera 114/240
+Reading camera 115/240
+Reading camera 116/240
+Reading camera 117/240
+Reading camera 118/240
+Reading camera 119/240
+Reading camera 120/240
+Reading camera 121/240
+Reading camera 122/240
+Reading camera 123/240
+Reading camera 124/240
+Reading camera 125/240
+Reading camera 126/240
+Reading camera 127/240
+Reading camera 128/240
+Reading camera 129/240
+Reading camera 130/240
+Reading camera 131/240
+Reading camera 132/240
+Reading camera 133/240
+Reading camera 134/240
+Reading camera 135/240
+Reading camera 136/240
+Reading camera 137/240
+Reading camera 138/240
+Reading camera 139/240
+Reading camera 140/240
+Reading camera 141/240
+Reading camera 142/240
+Reading camera 143/240
+Reading camera 144/240
+Reading camera 145/240
+Reading camera 146/240
+Reading camera 147/240
+Reading camera 148/240
+Reading camera 149/240
+Reading camera 150/240
+Reading camera 151/240
+Reading camera 152/240
+Reading camera 153/240
+Reading camera 154/240
+Reading camera 155/240
+Reading camera 156/240
+Reading camera 157/240
+Reading camera 158/240
+Reading camera 159/240
+Reading camera 160/240
+Reading camera 161/240
+Reading camera 162/240
+Reading camera 163/240
+Reading camera 164/240
+Reading camera 165/240
+Reading camera 166/240
+Reading camera 167/240
+Reading camera 168/240
+Reading camera 169/240
+Reading camera 170/240
+Reading camera 171/240
+Reading camera 172/240
+Reading camera 173/240
+Reading camera 174/240
+Reading camera 175/240
+Reading camera 176/240
+Reading camera 177/240
+Reading camera 178/240
+Reading camera 179/240
+Reading camera 180/240
+Reading camera 181/240
+Reading camera 182/240
+Reading camera 183/240
+Reading camera 184/240
+Reading camera 185/240
+Reading camera 186/240
+Reading camera 187/240
+Reading camera 188/240
+Reading camera 189/240
+Reading camera 190/240
+Reading camera 191/240
+Reading camera 192/240
+Reading camera 193/240
+Reading camera 194/240
+Reading camera 195/240
+Reading camera 196/240
+Reading camera 197/240
+Reading camera 198/240
+Reading camera 199/240
+Reading camera 200/240
+Reading camera 201/240
+Reading camera 202/240
+Reading camera 203/240
+Reading camera 204/240
+Reading camera 205/240
+Reading camera 206/240
+Reading camera 207/240
+Reading camera 208/240
+Reading camera 209/240
+Reading camera 210/240
+Reading camera 211/240
+Reading camera 212/240
+Reading camera 213/240
+Reading camera 214/240
+Reading camera 215/240
+Reading camera 216/240
+Reading camera 217/240
+Reading camera 218/240
+Reading camera 219/240
+Reading camera 220/240
+Reading camera 221/240
+Reading camera 222/240
+Reading camera 223/240
+Reading camera 224/240
+Reading camera 225/240
+Reading camera 226/240
+Reading camera 227/240
+Reading camera 228/240
+Reading camera 229/240
+Reading camera 230/240
+Reading camera 231/240
+Reading camera 232/240
+Reading camera 233/240
+Reading camera 234/240
+Reading camera 235/240
+Reading camera 236/240
+Reading camera 237/240
+Reading camera 238/240
+Reading camera 239/240
+Reading camera 240/240 [23/06 12:48:19]
+Loading Training Cameras [23/06 12:48:19]
+Loading Test Cameras [23/06 12:48:38]
+
+	Command being timed: "bash -lc cd third_party/gaussian-splatting && PYTHONPATH='/home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project/local_pkgs/3dgs' /home/zhangzhiwei/miniconda3/bin/conda run -n base python render.py -m ../../outputs/task1/background_3dgs/counter"
+	User time (seconds): 468.11
+	System time (seconds): 8.14
+	Percent of CPU this job got: 1013%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:47.01
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1196480
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 7
+	Minor (reclaiming a frame) page faults: 640692
+	Voluntary context switches: 50072
+	Involuntary context switches: 4807507
+	Swaps: 0
+	File system inputs: 3072
+	File system outputs: 151896
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+## nvidia-smi after
+Tue Jun 23 12:48:59 2026
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 30%   52C    P0             79W /  300W |       3MiB /  49140MiB |     11%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   38C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   36C    P8             12W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+status: 0
+end: 2026-06-23T12:48:59+00:00
+duration_sec: 47

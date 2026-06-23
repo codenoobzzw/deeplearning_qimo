@@ -1,0 +1,137 @@
+# background_counter_3dgs_metrics
+start: 2026-06-23T12:48:59+00:00
+project_root: /home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project
+git_commit: 4e0884f
+expected_output: outputs/task1/background_3dgs/counter/results.json
+command: bash -lc cd\ third_party/gaussian-splatting\ \&\&\ PYTHONPATH=\'/home/zhangzhiwei/homework/shenduxuexi\ /hw3_spatial_intelligence_project/local_pkgs/3dgs\'\ /home/zhangzhiwei/miniconda3/bin/conda\ run\ -n\ base\ python\ metrics.py\ -m\ ../../outputs/task1/background_3dgs/counter
+
+## nvidia-smi before
+Tue Jun 23 12:48:59 2026
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 30%   52C    P0             79W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   38C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   36C    P8             12W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+## command output
+
+Metric evaluation progress:   0%|          | 0/30 [00:00<?, ?it/s]
+Metric evaluation progress:   3%|▎         | 1/30 [00:01<00:36,  1.25s/it]
+Metric evaluation progress:   7%|▋         | 2/30 [00:02<00:30,  1.08s/it]
+Metric evaluation progress:  10%|█         | 3/30 [00:03<00:27,  1.03s/it]
+Metric evaluation progress:  13%|█▎        | 4/30 [00:04<00:26,  1.00s/it]
+Metric evaluation progress:  17%|█▋        | 5/30 [00:05<00:24,  1.01it/s]
+Metric evaluation progress:  20%|██        | 6/30 [00:06<00:23,  1.03it/s]
+Metric evaluation progress:  23%|██▎       | 7/30 [00:07<00:22,  1.03it/s]
+Metric evaluation progress:  27%|██▋       | 8/30 [00:07<00:21,  1.03it/s]
+Metric evaluation progress:  30%|███       | 9/30 [00:08<00:20,  1.04it/s]
+Metric evaluation progress:  33%|███▎      | 10/30 [00:09<00:19,  1.04it/s]
+Metric evaluation progress:  37%|███▋      | 11/30 [00:10<00:18,  1.04it/s]
+Metric evaluation progress:  40%|████      | 12/30 [00:11<00:17,  1.04it/s]
+Metric evaluation progress:  43%|████▎     | 13/30 [00:12<00:16,  1.04it/s]
+Metric evaluation progress:  47%|████▋     | 14/30 [00:13<00:15,  1.03it/s]
+Metric evaluation progress:  50%|█████     | 15/30 [00:14<00:14,  1.04it/s]
+Metric evaluation progress:  53%|█████▎    | 16/30 [00:15<00:13,  1.04it/s]
+Metric evaluation progress:  57%|█████▋    | 17/30 [00:16<00:12,  1.04it/s]
+Metric evaluation progress:  60%|██████    | 18/30 [00:17<00:11,  1.04it/s]
+Metric evaluation progress:  63%|██████▎   | 19/30 [00:18<00:10,  1.04it/s]
+Metric evaluation progress:  67%|██████▋   | 20/30 [00:19<00:09,  1.04it/s]
+Metric evaluation progress:  70%|███████   | 21/30 [00:20<00:08,  1.04it/s]
+Metric evaluation progress:  73%|███████▎  | 22/30 [00:21<00:07,  1.03it/s]
+Metric evaluation progress:  77%|███████▋  | 23/30 [00:22<00:06,  1.04it/s]
+Metric evaluation progress:  80%|████████  | 24/30 [00:23<00:05,  1.04it/s]
+Metric evaluation progress:  83%|████████▎ | 25/30 [00:24<00:04,  1.04it/s]
+Metric evaluation progress:  87%|████████▋ | 26/30 [00:25<00:03,  1.05it/s]
+Metric evaluation progress:  90%|█████████ | 27/30 [00:26<00:02,  1.04it/s]
+Metric evaluation progress:  93%|█████████▎| 28/30 [00:27<00:01,  1.04it/s]
+Metric evaluation progress:  97%|█████████▋| 29/30 [00:28<00:00,  1.05it/s]
+Metric evaluation progress: 100%|██████████| 30/30 [00:29<00:00,  1.05it/s]
+Metric evaluation progress: 100%|██████████| 30/30 [00:29<00:00,  1.03it/s]
+
+
+Scene: ../../outputs/task1/background_3dgs/counter
+Method: ours_1000
+  SSIM :    0.8315289
+  PSNR :   24.5241833
+  LPIPS:    0.1954147
+
+
+	Command being timed: "bash -lc cd third_party/gaussian-splatting && PYTHONPATH='/home/zhangzhiwei/homework/shenduxuexi /hw3_spatial_intelligence_project/local_pkgs/3dgs' /home/zhangzhiwei/miniconda3/bin/conda run -n base python metrics.py -m ../../outputs/task1/background_3dgs/counter"
+	User time (seconds): 121.77
+	System time (seconds): 11.63
+	Percent of CPU this job got: 373%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:35.69
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2163404
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 2
+	Minor (reclaiming a frame) page faults: 8380491
+	Voluntary context switches: 6462
+	Involuntary context switches: 13055
+	Swaps: 0
+	File system inputs: 1264
+	File system outputs: 72
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+## nvidia-smi after
+Tue Jun 23 12:49:36 2026
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX A6000               Off |   00000000:01:00.0 Off |                  Off |
+| 30%   52C    P0             79W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA RTX A6000               Off |   00000000:25:00.0 Off |                  Off |
+| 30%   37C    P8              8W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA RTX A6000               Off |   00000000:E1:00.0 Off |                  Off |
+| 30%   34C    P8             12W /  300W |       3MiB /  49140MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+status: 0
+end: 2026-06-23T12:49:36+00:00
+duration_sec: 37
