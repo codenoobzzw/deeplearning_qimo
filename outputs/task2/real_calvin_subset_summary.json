@@ -1,0 +1,86 @@
+{
+  "status": "real_calvin_subset_act_complete",
+  "repo_id": "xiaoma26/calvin-lerobot",
+  "local_dir": "data/calvin/calvin-lerobot-subset",
+  "honesty_note": "Bounded real CALVIN-LeRobot subset using LeRobot ACTPolicy on state/environment_state inputs; not full visual CNN ACT or simulator success-rate rollout.",
+  "splits": [
+    {
+      "split": "splitA",
+      "scene": "A",
+      "downloaded_episodes": 4,
+      "frames": 215,
+      "state_dim": 15,
+      "action_dim": 7
+    },
+    {
+      "split": "splitB",
+      "scene": "B",
+      "downloaded_episodes": 4,
+      "frames": 236,
+      "state_dim": 15,
+      "action_dim": 7
+    },
+    {
+      "split": "splitC",
+      "scene": "C",
+      "downloaded_episodes": 4,
+      "frames": 260,
+      "state_dim": 15,
+      "action_dim": 7
+    },
+    {
+      "split": "splitD",
+      "scene": "D",
+      "downloaded_episodes": 4,
+      "frames": 260,
+      "state_dim": 15,
+      "action_dim": 7
+    }
+  ],
+  "hyperparameters": {
+    "episodes_per_split": 4,
+    "chunk_size": 8,
+    "stride": 4,
+    "steps": 40,
+    "batch_size": 16,
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "dim_model": 64,
+    "n_heads": 4,
+    "dim_feedforward": 256,
+    "n_encoder_layers": 2,
+    "n_decoder_layers": 1,
+    "use_vae": false,
+    "loss": "LeRobot ACTPolicy Action L1"
+  },
+  "final_D": [
+    {
+      "model": "ACT-A-real-subset",
+      "metric_type": "real_calvin_subset_zero_shot_D",
+      "mean_action_l1": "0.277853",
+      "median_action_l1": "0.239040",
+      "success_rate_l1_lt_0.05": "0.000000",
+      "success_rate_l1_lt_0.10": "0.044118",
+      "status": "real_subset_run",
+      "note": "Real xiaoma26/calvin-lerobot parquet subset; offline Action L1, not simulator rollout success."
+    },
+    {
+      "model": "ACT-ABC-real-subset",
+      "metric_type": "real_calvin_subset_zero_shot_D",
+      "mean_action_l1": "0.254633",
+      "median_action_l1": "0.226330",
+      "success_rate_l1_lt_0.05": "0.000000",
+      "success_rate_l1_lt_0.10": "0.044118",
+      "status": "real_subset_run",
+      "note": "Real xiaoma26/calvin-lerobot parquet subset; offline Action L1, not simulator rollout success."
+    }
+  ],
+  "weights": [
+    "outputs/weights/ACT-A-real-subset_real_calvin_subset.pt",
+    "outputs/weights/ACT-ABC-real-subset_real_calvin_subset.pt"
+  ],
+  "figures": [
+    "report/figs/act_real_calvin_action_l1.png",
+    "report/figs/act_real_calvin_d_eval.png"
+  ]
+}

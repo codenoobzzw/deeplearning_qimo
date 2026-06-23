@@ -416,3 +416,14 @@ completed. Results in the report must be traceable to logs or generated files.
 - success: yes
 - duration_sec: 14
 - gpu note: see nvidia-smi snapshots in the log
+
+## act_real_calvin_subset
+- start: 2026-06-23T11:13:45+00:00
+- end: 2026-06-23T11:13:55+00:00
+- git commit: ea38ad6
+- command: `env MPLCONFIGDIR=/tmp/hw3_mpl XDG_CACHE_HOME=/tmp/hw3_cache /home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_calvin_subset.py --episodes-per-split 4 --steps 40 --log-every 10 --chunk-size 8 --stride 4 --batch-size 16 `
+- output path: `outputs/task2/real_calvin_subset_summary.json`
+- log: `logs/act_real_calvin_subset_20260623_111345.log`
+- success: yes
+- duration_sec: 10
+- gpu note: see nvidia-smi snapshots in the log

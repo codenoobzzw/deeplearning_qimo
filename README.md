@@ -1,6 +1,6 @@
 # 深度学习与空间智能期末作业工程
 
-本项目对应“基于 3DGS/AIGC 的多源资产融合与 ACT 跨环境泛化实验”。工程已按可复现方式组织脚本、输入、日志、表格和报告；所有已写入报告的状态都来自真实运行日志或真实输出，没有补造训练指标。当前版本包含两条线：一条是 3DGS/threestudio/Zero123/LeRobot 的官方入口；另一条是在外部模型权重、CALVIN 元数据和 Mip-NeRF360 大数据不可用时跑通的替代闭环，用于产出 A/B/C/背景融合视频、ACT action chunking 曲线和模型权重。
+本项目对应“基于 3DGS/AIGC 的多源资产融合与 ACT 跨环境泛化实验”。工程已按可复现方式组织脚本、输入、日志、表格和报告；所有已写入报告的状态都来自真实运行日志或真实输出，没有补造训练指标。当前版本包含三条线：3DGS/threestudio/Zero123/LeRobot 的官方入口、在外部模型权重和 Mip-NeRF360 大数据不可用时跑通的 A/B/C/背景替代融合闭环，以及基于 `xiaoma26/calvin-lerobot` 真实 parquet 子集的 LeRobot ACTPolicy 离线实验。
 
 ## 目录结构
 
@@ -135,7 +135,16 @@ bash scripts/train_act_ABC.sh
 bash scripts/eval_act_D.sh
 ```
 
-服务器内 Hugging Face API 探测仍被代理/SSL 问题阻塞，见 `logs/calvin_hf_metadata_probe_*.log`。根据数据集网页确认的顶层目录，脚本使用 `--fallback-known-splits` 记录 `train_A=splitA`、`train_ABC=splitA+splitB+splitC`、`test_D=splitD`，但 episodes/frames/action_dim 等统计保持 NA，避免在未下载元数据时编造数量。
+全量 `xiaoma26/calvin-lerobot` 约 69.9GB，本工程没有下载全量数据。为了补上真实数据实验，已下载 `splitA/splitB/splitC/splitD` 每个 split 前 4 个 parquet episode，并运行 LeRobot 官方 `ACTPolicy` 的离线 action chunking 子集训练：
+
+```bash
+/home/zhangzhiwei/miniconda3/bin/conda run -n PG python -c "from pathlib import Path; from huggingface_hub import hf_hub_download; repo='xiaoma26/calvin-lerobot'; out=Path('data/calvin/calvin-lerobot-subset'); splits=['splitA','splitB','splitC','splitD']; meta=['info.json','modality.json','episodes.jsonl','tasks.jsonl']; [hf_hub_download(repo, f'{s}/meta/{m}', repo_type='dataset', local_dir=str(out)) for s in splits for m in meta]; [hf_hub_download(repo, f'{s}/data/chunk-000/episode_{i:06d}.parquet', repo_type='dataset', local_dir=str(out)) for s in splits for i in range(4)]"
+MPLCONFIGDIR=/tmp/hw3_mpl XDG_CACHE_HOME=/tmp/hw3_cache \
+/home/zhangzhiwei/miniconda3/bin/conda run -n base python scripts/train_act_calvin_subset.py \
+  --episodes-per-split 4 --steps 40 --log-every 10 --chunk-size 8 --stride 4 --batch-size 16
+```
+
+真实子集实验使用 state/environment_state 输入，未使用图像 CNN，也不是 CALVIN simulator rollout success rate。结果见 `outputs/task2/real_calvin_subset_summary.json`、`report/tables/task2_real_calvin_eval_D.csv`、`report/figs/act_real_calvin_action_l1.png`。
 
 为了补齐作业要求中的训练曲线、D 环境评估和权重包，本工程还提供一个已运行的 ACT-style action chunking 代理实验：
 
@@ -170,8 +179,10 @@ cp report/main.pdf report/report.pdf
 - 背景代理 Gaussian：`outputs/task1/background_3dgs/counter_proxy/point_cloud/iteration_0001/point_cloud.ply`
 - 合并场景 PLY：`outputs/task1/merged_scene/point_cloud.ply`
 - 漫游视频：`outputs/task1/videos/merged_scene_walkthrough.mp4`
-- ACT 曲线：`report/figs/act_action_l1_loss.png`
-- ACT D 评估：`report/tables/task2_eval_D.csv`
+- ACT 真实子集曲线：`report/figs/act_real_calvin_action_l1.png`
+- ACT 真实子集 D 评估：`report/tables/task2_real_calvin_eval_D.csv`
+- ACT proxy 曲线：`report/figs/act_action_l1_loss.png`
+- ACT proxy D 评估：`report/tables/task2_eval_D.csv`
 - 背景去除对比图：`outputs/task1/figures/object_C_bg_removal.png`
 - 结果表：`report/tables/task1_assets.csv`
 - CALVIN 探测表：`report/tables/calvin_split_summary.csv`
@@ -184,7 +195,7 @@ cp report/main.pdf report/report.pdf
 - COLMAP 失败：6 张照片不足以初始化稳定几何；优先使用 `A_video.mp4` 或重新拍摄 80-180 张环绕照片，保证相邻视角重叠和足够基线。
 - threestudio/Zero123 依赖重：建议单独创建 `requirements/env_threestudio.yml` 环境，避免污染 base；当前报告中的 B/C 完整融合使用明确标注的代理 mesh。
 - Mip-NeRF360 数据大：当前背景完整融合使用 counter-like 代理 Gaussian；如能下载 counter/garden/bicycle，可用 `scripts/train_3dgs_background.sh` 替换代理背景。
-- CALVIN/Hugging Face 失败：检查服务器代理和 SSL，确认能访问 `https://huggingface.co/datasets/xiaoma26/calvin-lerobot` 后再运行 split 脚本；当前 ACT 曲线和权重来自代理实验，不冒充真实 CALVIN 成绩。
+- CALVIN/Hugging Face：全量数据很大，当前只下载每个 split 的 4 个 episode 做真实子集实验；当前 ACT 结果是离线 Action L1，不冒充 simulator 成功率。
 
 ## GitHub 与权重
 
@@ -197,7 +208,7 @@ git@github.com:codenoobzzw/deeplearning_qimo.git
 
 本工程已包含源码、脚本、输入文件、日志、报告图表、关键输出和提交检查清单。`third_party/`、`local_pkgs/` 和 `data/` 默认不上传到 GitHub，避免把第三方仓库、本地依赖和中间数据缓存一起塞进仓库。
 
-`outputs/weights/hw3_weights.zip` 当前包含 `act_A_proxy.pt` 与 `act_ABC_proxy.pt`，用于复现报告中的 ACT 替代实验曲线；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。
+`outputs/weights/hw3_weights.zip` 当前包含 `act_A_proxy.pt`、`act_ABC_proxy.pt`、`ACT-A-real-subset_real_calvin_subset.pt` 与 `ACT-ABC-real-subset_real_calvin_subset.pt`；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。
 
 模型权重百度网盘分享：
 

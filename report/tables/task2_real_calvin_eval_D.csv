@@ -1,0 +1,3 @@
+model,metric_type,mean_action_l1,median_action_l1,success_rate_l1_lt_0.05,success_rate_l1_lt_0.10,status,note
+ACT-A-real-subset,real_calvin_subset_zero_shot_D,0.277853,0.239040,0.000000,0.044118,real_subset_run,"Real xiaoma26/calvin-lerobot parquet subset; offline Action L1, not simulator rollout success."
+ACT-ABC-real-subset,real_calvin_subset_zero_shot_D,0.254633,0.226330,0.000000,0.044118,real_subset_run,"Real xiaoma26/calvin-lerobot parquet subset; offline Action L1, not simulator rollout success."

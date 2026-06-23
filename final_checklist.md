@@ -13,8 +13,12 @@
 - [x] calvin split summary exists
 - [x] ACT-A checkpoint exists
 - [x] ACT-ABC checkpoint exists
+- [x] ACT-A real CALVIN subset checkpoint exists
+- [x] ACT-ABC real CALVIN subset checkpoint exists
 - [x] ACT-A curve exists
 - [x] ACT-ABC curve exists
+- [x] ACT real CALVIN subset curve exists
+- [x] ACT real CALVIN subset D eval table exists
 - [x] environment D eval table exists
 - [x] README.md exists
 - [x] report/report.pdf exists
