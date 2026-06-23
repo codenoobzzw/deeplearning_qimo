@@ -27,7 +27,7 @@
 
 \noindent\textbf{小组成员和分工：}独立完成；本人完成主要实现、实验运行与报告整理。\\
 \textbf{GitHub 仓库链接：}\url{https://github.com/codenoobzzw/deeplearning_qimo.git}。\\
-\textbf{模型权重网盘链接：}待上传至百度网盘；当前本地权重包为 \texttt{outputs/weights/hw3\_weights.zip}，包含 ACT 替代实验权重。
+\textbf{模型权重网盘链接：}\url{https://pan.baidu.com/s/18O2o9Fr9d0nntlCZjT-jNA?pwd=1111}，提取码：1111；当前本地权重包为 \texttt{outputs/weights/hw3\_weights.zip}，包含 ACT 替代实验权重。
 
 \begin{abstract}
 这次作业我围绕两个任务搭建了一个可复现实验工程：题目一完成多源 3D 资产生成、统一表示和场景融合；题目二完成 ACT 动作分块策略的跨环境泛化对比。物体 A 使用补拍环绕视频真实跑通 COLMAP+3DGS：90 张抽帧中注册 63 张，训练 1000 步后得到 19133 个 Gaussian，测试集 PSNR/SSIM/LPIPS 分别为 23.9658/0.8707/0.2323。受限于服务器网络、外部模型权重和大规模数据下载条件，threestudio SDS、Zero123、Mip-NeRF360 以及真实 CALVIN ACT 没有全部跑完；为尽量完成作业要求的完整链路，我补充实现了明确标注的替代实验：生成文本鸭子 mesh、单图杯子 mesh 和类 counter 背景 Gaussian，统一采样并合并为 115133 个高斯点，同时导出多视角漫游视频；题目二则训练 ACT 动作分块替代模型，ACT-ABC 在 D 域替代评估中 Action L1 为 0.0409，低于 ACT-A 的 0.3034。报告中把真实结果和替代实验分开说明，不把替代结果写成官方模型或真实 CALVIN 指标。

@@ -197,4 +197,11 @@ git@github.com:codenoobzzw/deeplearning_qimo.git
 
 本工程已包含源码、脚本、输入文件、日志、报告图表、关键输出和提交检查清单。`third_party/`、`local_pkgs/` 和 `data/` 默认不上传到 GitHub，避免把第三方仓库、本地依赖和中间数据缓存一起塞进仓库。
 
-`outputs/weights/hw3_weights.zip` 当前包含 `act_A_proxy.pt` 与 `act_ABC_proxy.pt`，用于复现报告中的 ACT 替代实验曲线；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。百度网盘上传完成后，可把分享链接补回报告首页的“模型权重网盘链接”处。
+`outputs/weights/hw3_weights.zip` 当前包含 `act_A_proxy.pt` 与 `act_ABC_proxy.pt`，用于复现报告中的 ACT 替代实验曲线；物体 A 的 3DGS PLY 结果已保留在 `outputs/task1/object_A_3dgs/`。
+
+模型权重百度网盘分享：
+
+```text
+链接：https://pan.baidu.com/s/18O2o9Fr9d0nntlCZjT-jNA?pwd=1111
+提取码：1111
+```
